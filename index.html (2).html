@@ -1,0 +1,2340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>VolleyCode Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1e60d5;--blue-light:#3b7ef6;--blue-bg:#eff6ff;
+  --orange:#f97316;--orange-light:#fb923c;
+  --green:#16a34a;--green-light:#22c55e;--green-bg:#dcfce7;
+  --red:#dc2626;--red-bg:#fee2e2;
+  --gray:#6b7280;--gray-light:#9ca3af;--gray-bg:#f3f4f6;--gray-border:#e5e7eb;
+  --navy:#1e3a8a;
+  --bg:#f9fafb;--white:#fff;--text:#111827;--text-light:#6b7280;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+
+/* ═══════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════ */
+.header{background:var(--blue);padding:14px 24px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.logo-box{width:40px;height:40px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--blue);letter-spacing:-.5px}
+.logo-text{font-weight:700;font-size:20px;color:white}
+
+/* ═══════════════════════════════════════
+   PAGE SWITCHER (hidden, controlled by JS)
+   ═══════════════════════════════════════ */
+.page{display:none}
+.page.active{display:block}
+
+
+/* ═══════════════════════════════════════
+   SETUP VIEW
+   ═══════════════════════════════════════ */
+.setup-view{min-height:100vh;background:var(--bg);padding:24px}
+.setup-header{background:white;border-radius:14px;padding:22px 26px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.setup-title{font-weight:800;font-size:28px;color:var(--text)}
+.setup-subtitle{font-size:14px;color:var(--gray);margin-top:4px}
+.setup-actions{display:flex;gap:10px;flex-wrap:wrap}
+.setup-btn{padding:11px 18px;border-radius:9px;border:1.5px solid var(--gray-border);background:white;cursor:pointer;font-weight:700;font-size:14px;color:var(--text)}
+.setup-btn.primary{background:var(--blue);color:white;border-color:var(--blue)}
+.setup-btn.orange{background:var(--orange);color:white;border-color:var(--orange)}
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.setup-card{background:white;border-radius:14px;padding:20px 22px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.setup-card.full{grid-column:1/-1}
+.setup-card-title{font-weight:800;font-size:18px;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.setup-form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.setup-form-grid.two{grid-template-columns:repeat(2,1fr)}
+.setup-field{display:flex;flex-direction:column;gap:6px}
+.setup-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray)}
+.setup-input,.setup-select,.setup-textarea{border:1.5px solid var(--gray-border);border-radius:9px;padding:10px 12px;font-size:14px;font-family:'Inter',sans-serif;background:white;outline:none}
+.setup-input:focus,.setup-select:focus,.setup-textarea:focus{border-color:var(--blue)}
+.setup-textarea{min-height:96px;resize:vertical;line-height:1.45}
+.rotation-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}
+.rotation-cell{background:var(--gray-bg);border:1px solid var(--gray-border);border-radius:10px;padding:8px}
+.rotation-cell label{font-size:10px;font-weight:800;color:var(--gray);display:block;margin-bottom:5px;text-align:center}
+.rotation-cell input,.rotation-cell select{width:100%;text-align:center;border:1px solid var(--gray-border);border-radius:7px;padding:7px 4px;font-weight:800;font-family:'JetBrains Mono',monospace;background:white}
+.setup-help{font-size:12px;color:var(--gray);margin-top:8px;line-height:1.5}
+.setup-rotation-wrap{margin-top:14px;border-top:1px solid var(--gray-border);padding-top:14px}
+.setup-rotation-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:12px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.06em}
+.setup-court{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;background:#eef4ff;border:2px solid var(--navy);border-radius:12px;padding:12px;margin-top:8px}
+.setup-slot{background:white;border:1.5px solid var(--gray-border);border-radius:10px;padding:10px;min-height:96px}
+.setup-slot.front{background:#f8fbff}.setup-slot.back{background:#fff}
+.setup-slot-label{font-size:11px;font-weight:900;color:var(--blue);letter-spacing:.06em;margin-bottom:6px;text-align:center}
+.setup-slot select{width:100%;border:1.5px solid var(--gray-border);border-radius:8px;padding:7px 8px;font-weight:700;background:white;outline:none}
+.setup-slot select:focus{border-color:var(--blue)}
+.setup-player-preview{margin-top:7px;font-size:12px;color:var(--gray);line-height:1.35;min-height:34px;text-align:center}
+.setup-player-preview strong{color:var(--text)}
+.role-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:10px;background:var(--blue-bg);color:var(--blue);font-size:10px;font-weight:900;margin-left:4px;text-transform:uppercase}
+.libero-warning{display:none;margin-top:10px;background:#fffbeb;border:1.5px solid #fde68a;color:#b45309;border-radius:10px;padding:9px 11px;font-size:12px;font-weight:700}
+.libero-warning.show{display:block}
+
+.setup-libero-box{margin-top:12px;background:#f8fbff;border:1.5px dashed #93c5fd;border-radius:12px;padding:12px}
+.setup-libero-title{font-size:12px;font-weight:900;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.setup-libero-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.setup-libero-field label{display:block;font-size:10px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.setup-libero-field select{width:100%;border:1.5px solid var(--gray-border);border-radius:8px;padding:8px 10px;font-weight:700;background:white;outline:none}
+.setup-libero-field select:focus{border-color:var(--blue)}
+.setup-libero-note{font-size:11px;color:var(--gray);margin-top:8px;line-height:1.4}
+@media(max-width:900px){.setup-libero-grid{grid-template-columns:1fr}}
+
+.setup-system-box{margin-top:12px;background:#fff7ed;border:1.5px solid #fed7aa;border-radius:10px;padding:10px 12px}
+.setup-system-title{font-size:11px;font-weight:900;color:#c2410c;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+.setup-system-options{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.setup-system-option{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--text);cursor:pointer}
+.setup-system-option input{accent-color:var(--orange)}
+.setup-system-note{font-size:11px;color:var(--gray);margin-top:7px;line-height:1.35}
+.setup-roster-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+.setup-small-btn{border:1px solid var(--gray-border);background:white;border-radius:8px;padding:7px 10px;font-size:12px;font-weight:800;cursor:pointer;color:var(--blue)}
+.setup-small-btn:hover{background:var(--blue-bg)}
+
+.setup-step{display:none}.setup-step.active{display:block}
+.setup-progress{display:flex;gap:8px;margin-bottom:16px}
+.setup-progress-pill{padding:7px 12px;border-radius:999px;background:var(--gray-bg);color:var(--gray);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.setup-progress-pill.active{background:var(--blue-bg);color:var(--blue)}
+.add-player-row{display:grid;grid-template-columns:80px 1fr 105px auto;gap:8px;margin-top:10px;align-items:end}
+.add-player-row .setup-input,.add-player-row .setup-select{padding:8px 10px}
+.international-rules-note{background:var(--blue-bg);border:1.5px solid #bfdbfe;color:var(--navy);border-radius:10px;padding:10px 12px;font-size:12px;font-weight:700;margin-top:10px}
+@media(max-width:900px){.add-player-row{grid-template-columns:1fr}.setup-progress{flex-wrap:wrap}}
+
+@media(max-width:900px){.setup-grid{grid-template-columns:1fr}.setup-form-grid,.setup-form-grid.two{grid-template-columns:1fr}.rotation-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* ═══════════════════════════════════════
+   MATCH VIEW
+   ═══════════════════════════════════════ */
+.match-view{min-height:100vh;background:var(--bg)}
+.scorebar{background:white;border-bottom:2px solid var(--orange);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.team-side{display:flex;align-items:center;gap:12px}
+.team-name{font-weight:700;font-size:20px;color:var(--text)}
+.serving-badge{padding:4px 10px;border-radius:20px;border:1.5px solid var(--orange);color:var(--orange);font-size:11px;font-weight:700;letter-spacing:.05em;display:flex;align-items:center;gap:6px}
+.serving-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.set-score{font-weight:800;font-size:12px;background:var(--navy);color:white;padding:5px 10px;border-radius:6px;min-width:125px;text-align:center;white-space:nowrap}
+.score-main{display:flex;align-items:center;gap:20px}
+.score-num{font-weight:800;font-size:52px;color:var(--navy);line-height:1;transition:all .2s}
+.score-num.bump{transform:scale(1.2);color:var(--green)}
+.score-dash{font-weight:300;font-size:36px;color:var(--gray-light)}
+.set-label{background:var(--gray-bg);border-bottom:1px solid var(--gray-border);text-align:center;padding:6px;font-weight:700;font-size:13px;color:var(--navy);letter-spacing:.06em;text-transform:uppercase}
+
+.main-grid{display:grid;grid-template-columns:260px 1fr 190px;height:calc(100vh - 180px);min-height:450px}
+
+/* LEFT */
+.sidebar-left{background:white;border-right:1px solid var(--gray-border);display:flex;flex-direction:column;overflow:hidden}
+.sidebar-title{padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);background:var(--gray-bg);border-bottom:1px solid var(--gray-border)}
+.pbp-list{flex:1;overflow-y:auto;padding:6px 0}
+.pbp-item{padding:10px 14px;border-bottom:1px solid var(--gray-border);display:grid;grid-template-columns:36px 50px 1fr;gap:6px;align-items:start;font-size:12px}
+.pbp-item:hover{background:var(--gray-bg)}
+.pbp-score{font-weight:700;color:var(--gray)}
+.pbp-code{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px}
+.pbp-code.pos{background:var(--green-bg);color:var(--green)}
+.pbp-code.neg{background:var(--red-bg);color:var(--red)}
+.pbp-code.neu{background:#fef3c7;color:#d97706}
+.pbp-text{color:var(--gray);line-height:1.4}
+
+/* CENTER */
+.center-panel{background:var(--bg);overflow-y:auto;padding:20px}
+.court{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:820px;min-height:390px;margin:0 auto 16px;padding:52px 70px;background:#1f9d43;border:none;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.court::before{content:'';position:absolute;left:50%;top:26px;bottom:26px;width:6px;background:white;transform:translateX(-50%);z-index:1;border-radius:10px}
+.court::after{content:'';position:absolute;left:50%;top:36px;width:18px;height:18px;background:#2f3742;border-radius:50%;transform:translateX(-50%);z-index:4;box-shadow:0 300px 0 #2f3742}
+.court-half{position:relative;z-index:2;padding:20px 22px;min-height:286px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:18px;align-items:center;justify-items:center;background:#fbb33b;border:6px solid white}
+.court-half.home{border-right:3px solid white;border-radius:0;background:#fbb33b}
+.court-half.away{border-left:3px solid white;border-radius:0;background:#fbb33b}
+.court-half.home .player-spot:nth-child(1){grid-column:2;grid-row:1}.court-half.home .player-spot:nth-child(2){grid-column:2;grid-row:2}.court-half.home .player-spot:nth-child(3){grid-column:2;grid-row:3}.court-half.home .player-spot:nth-child(4){grid-column:1;grid-row:1}.court-half.home .player-spot:nth-child(5){grid-column:1;grid-row:2}.court-half.home .player-spot:nth-child(6){grid-column:1;grid-row:3}
+.court-half.away .player-spot:nth-child(1){grid-column:1;grid-row:1}.court-half.away .player-spot:nth-child(2){grid-column:1;grid-row:2}.court-half.away .player-spot:nth-child(3){grid-column:1;grid-row:3}.court-half.away .player-spot:nth-child(4){grid-column:2;grid-row:1}.court-half.away .player-spot:nth-child(5){grid-column:2;grid-row:2}.court-half.away .player-spot:nth-child(6){grid-column:2;grid-row:3}
+.player-spot{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:transform .12s;z-index:5}
+.player-spot:hover{transform:scale(1.1)}
+.player-pos{font-size:10px;font-weight:900;color:#1f2937;letter-spacing:.04em;background:rgba(255,255,255,.8);padding:1px 7px;border-radius:999px}
+.player-num{font-weight:800;font-size:18px;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #111827;box-shadow:0 2px 5px rgba(0,0,0,.18);background:white;color:var(--blue)}
+.court-half.home .player-num{border-color:#111827;color:var(--blue)}
+.court-half.away .player-num{border-color:#111827;color:var(--orange)}
+
+.code-area{background:white;border:1px solid var(--gray-border);border-radius:8px;padding:12px 16px;margin-bottom:12px}
+.code-hint{font-size:12px;color:var(--gray);margin-bottom:8px;text-align:center}
+.code-hint strong{color:var(--text);font-weight:600}
+.input-row{display:flex;gap:8px;max-width:540px;margin:0 auto}
+.code-field{flex:1;background:white;border:2px solid var(--gray-border);border-radius:8px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:500;outline:none;transition:border .15s}
+.code-field:focus{border-color:var(--blue)}
+.code-field::placeholder{color:var(--gray-light);font-family:'Inter',sans-serif;font-size:13px}
+.icon-btn{width:42px;height:42px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s}
+.mic-btn{background:var(--gray-bg);color:var(--gray);border:1.5px solid var(--gray-border)}
+.mic-btn:hover{background:#e5e7eb}
+.mic-btn.recording{background:var(--red-bg);color:var(--red);border-color:var(--red);animation:pulse-rec 1s infinite}
+@keyframes pulse-rec{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.3)}50%{box-shadow:0 0 0 5px rgba(220,38,38,.1)}}
+.submit-btn{background:var(--blue);color:white;font-size:19px}
+.submit-btn:hover{background:var(--blue-light)}
+
+.voice-area{background:white;border:1px solid var(--gray-border);border-radius:8px;padding:10px 14px}
+.voice-status{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.rec-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray);display:flex;align-items:center;gap:6px}
+.rec-dot{width:8px;height:8px;border-radius:50%;background:var(--gray-light)}
+.rec-dot.active{background:var(--red);animation:pulse 1s infinite}
+.rec-timer{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray);margin-left:auto}
+.detected-bar{display:flex;align-items:center;gap:8px;background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:8px 12px;margin-bottom:8px;cursor:pointer;font-size:13px;font-weight:600;color:var(--green)}
+.detected-bar:hover{background:#dcfce7}
+.confirm-box{background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.confirm-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--gray-border);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.cg-cell{background:white;padding:8px 10px}
+.cg-label{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--gray);font-weight:600;margin-bottom:3px}
+.cg-val{font-weight:700;font-size:14px;color:var(--text)}
+.code-display{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--blue)}
+.eval-badge{display:inline-flex;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700}
+.eval-pos{background:var(--green-bg);color:var(--green)}
+.eval-neg{background:var(--red-bg);color:var(--red)}
+.eval-neu{background:#fef3c7;color:#d97706}
+.confirm-btns{display:flex;gap:8px}
+.btn-save{padding:8px 16px;border-radius:7px;border:none;cursor:pointer;font-size:13px;font-weight:700;background:var(--green);color:white}
+.btn-save:hover{opacity:.9}
+.btn-discard{padding:8px 14px;border-radius:7px;border:1.5px solid var(--gray-border);cursor:pointer;font-size:13px;font-weight:600;background:white;color:var(--gray)}
+.btn-discard:hover{background:var(--gray-bg)}
+.transcript{background:var(--gray-bg);border:1px solid var(--gray-border);border-radius:7px;padding:8px 12px;min-height:36px;font-size:13px;line-height:1.5}
+.transcript.empty{color:var(--gray-light);font-style:italic}
+
+/* RIGHT */
+.sidebar-right{background:white;border-left:1px solid var(--gray-border);overflow-y:auto}
+.sb-section{padding:12px 14px;border-bottom:1px solid var(--gray-border)}
+.sb-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);margin-bottom:10px}
+.action-btn{width:100%;padding:9px 12px;border-radius:7px;border:1.5px solid var(--gray-border);background:white;cursor:pointer;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:7px;transition:all .12s;text-align:left}
+.action-btn:hover{background:var(--gray-bg);border-color:var(--gray)}
+.action-btn.success{border-color:#86efac;color:var(--green)}.action-btn.success:hover{background:#f0fdf4}
+.action-btn.info{border-color:#93c5fd;color:var(--blue)}.action-btn.info:hover{background:var(--blue-bg)}
+.action-btn.warn{background:#fffbeb;border-color:#fde68a;color:#d97706}.action-btn.warn:hover{background:#fef3c7}
+.action-btn.mic-side{}.action-btn.mic-side.recording{background:var(--red-bg);border-color:#fca5a5;color:var(--red)}
+.voice-hint{font-size:11px;color:var(--gray);line-height:1.5;margin-top:4px}
+
+.rotation-status{background:var(--blue-bg);border:1.5px solid #bfdbfe;border-radius:10px;padding:10px 12px;margin-top:8px;font-size:12px;line-height:1.45}
+.rotation-status-row{padding:6px 0;border-bottom:1px solid #bfdbfe}
+.rotation-status-row:last-child{border-bottom:none}
+.rotation-status strong{color:var(--navy)}
+.rotation-status .ok{color:var(--green);font-weight:800}
+.rotation-status .warn{color:#b45309;font-weight:800}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(50px);background:var(--navy);color:white;padding:10px 20px;border-radius:30px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:all .25s}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* ═══════════════════════════════════════
+   ANALYTICS VIEW
+   ═══════════════════════════════════════ */
+.analytics-view{min-height:100vh;background:var(--bg);padding:24px}
+.analytics-header{background:white;border-radius:12px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.analytics-title-area{display:flex;align-items:center;gap:12px}
+.analytics-icon{font-size:32px}
+.analytics-title{font-weight:700;font-size:28px;color:var(--text)}
+.analytics-subtitle{font-size:14px;color:var(--gray);margin-top:2px}
+.analytics-actions{display:flex;gap:10px}
+.btn-back{padding:10px 16px;border-radius:8px;border:1.5px solid var(--gray-border);background:white;cursor:pointer;font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;transition:all .15s}
+.btn-back:hover{background:var(--gray-bg)}
+.btn-export{padding:10px 18px;border-radius:8px;border:none;cursor:pointer;font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px;transition:opacity .15s}
+.btn-export.csv{background:var(--blue);color:white}
+.btn-export.csv:hover{opacity:.9}
+.btn-export.pdf{background:var(--orange);color:white}
+.btn-export.pdf:hover{opacity:.9}
+
+.filters-bar{background:white;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);flex-wrap:wrap}
+.filter-group{display:flex;align-items:center;gap:8px}
+.filter-label{font-size:12px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.05em}
+.filter-select{padding:8px 12px;border-radius:7px;border:1.5px solid var(--gray-border);background:white;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;min-width:140px}
+.filter-select:hover{border-color:var(--gray)}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:white;border-radius:12px;padding:18px 20px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.stat-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--gray);font-weight:600;margin-bottom:8px}
+.stat-value{font-weight:800;font-size:40px;line-height:1;margin-bottom:4px}
+.stat-value.blue{color:var(--blue)}
+.stat-value.orange{color:var(--orange)}
+.stat-value.green{color:var(--green)}
+.stat-value.red{color:var(--red)}
+.stat-detail{font-size:13px;color:var(--gray);margin-top:4px}
+
+.player-stats-section{background:white;border-radius:12px;padding:20px 24px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.section-title{font-weight:700;font-size:20px;color:var(--text);margin-bottom:16px}
+.stats-table{width:100%;border-collapse:collapse;font-size:13px}
+.stats-table thead{background:var(--gray-bg)}
+.stats-table th{text-align:left;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray);font-weight:700;border-bottom:2px solid var(--gray-border)}
+.stats-table th.center{text-align:center}
+.stats-table td{padding:12px 12px;border-bottom:1px solid var(--gray-border);color:var(--text)}
+.stats-table td.center{text-align:center}
+.stats-table tbody tr:hover{background:var(--gray-bg)}
+.stats-table tbody tr:last-child{font-weight:700;background:#f9fafb}
+.stats-table tbody tr:last-child td{border-bottom:none}
+.skill-group{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;text-align:center;font-size:12px}
+.skill-group .head{font-size:10px;color:var(--gray);font-weight:600}
+.skill-val{font-weight:600}
+.skill-val.green{color:var(--green)}
+.skill-val.red{color:var(--red)}
+.skill-val.gray{color:var(--gray)}
+.eff-badge{display:inline-flex;align-items:center;justify-content:center;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:700;min-width:48px}
+.eff-high{background:var(--green-bg);color:var(--green)}
+.eff-mid{background:#fef3c7;color:#d97706}
+.eff-low{background:var(--red-bg);color:var(--red)}
+.pts-num{font-weight:700;font-size:15px}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--gray-border);border-radius:4px}
+@media(max-width:900px){
+  .main-grid{grid-template-columns:0 1fr 0}
+  .sidebar-left,.sidebar-right{display:none}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-box">VCP</div>
+  <div class="logo-text">VolleyCode Pro</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     PAGE 0: MATCH SETUP
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="setupPage" class="page active">
+  <div class="setup-view">
+    <div class="setup-header">
+      <div>
+        <div class="setup-title">Match Setup</div>
+        <div class="setup-subtitle">Step 1: match + teams. Step 2: starting rotations. International rules are used by default.</div>
+      </div>
+      <div class="setup-actions">
+        <button class="setup-btn" onclick="quickStartMatch()">⚡ Quick Start</button>
+        <button class="setup-btn primary" id="setupMainNextBtn" onclick="goToRotationSetup()">Next: Rotations →</button>
+      </div>
+    </div>
+
+    <div class="setup-progress">
+      <div class="setup-progress-pill active" id="setupPillInfo">1 Match & Teams</div>
+      <div class="setup-progress-pill" id="setupPillRotation">2 Starting Rotation</div>
+    </div>
+
+    <div id="setupStepInfo" class="setup-step active">
+      <div class="setup-grid">
+        <div class="setup-card full">
+          <div class="setup-card-title">📋 Match Info + Teams Info</div>
+          <div class="setup-form-grid">
+            <div class="setup-field"><label class="setup-label">Competition</label><input class="setup-input" id="setupCompetition" placeholder="Moroccan Serie A / Friendly"/></div>
+            <div class="setup-field"><label class="setup-label">Date</label><input class="setup-input" id="setupDate" type="date"/></div>
+            <div class="setup-field"><label class="setup-label">Venue</label><input class="setup-input" id="setupVenue" placeholder="Gym / City"/></div>
+          </div>
+          <div class="international-rules-note">Default match rules: best of 5 sets, 25 points per set, 15-point tie-break, advanced voice coding. No need to fill this every match.</div>
+        </div>
+
+        <div class="setup-card">
+          <div class="setup-card-title">🔵 Team A / Home</div>
+          <div class="setup-form-grid two">
+            <div class="setup-field"><label class="setup-label">Team Name</label><input class="setup-input" id="setupHomeName" value="Eagles FC"/></div>
+            <div class="setup-field"><label class="setup-label">Short Name</label><input class="setup-input" id="setupHomeShort" value="EAG" maxlength="4"/></div>
+            <div class="setup-field"><label class="setup-label">Coach</label><input class="setup-input" id="setupHomeCoach" placeholder="Coach name"/></div>
+          </div>
+          <div class="setup-field" style="margin-top:12px"><label class="setup-label">Players List</label><textarea class="setup-textarea" id="setupHomePlayers" oninput="refreshSetupRotation('home')" placeholder="One player per line: 9 - Player Name - OH">1 - Adam Carter - S
+4 - Leo Martin - OPP
+7 - Noah Smith - MB
+9 - Zaid Khoutam - OH
+11 - Sami Benali - L
+14 - Omar Lopez - OH</textarea></div>
+          <div class="add-player-row">
+            <input class="setup-input" id="homeAddNum" placeholder="#" type="number" min="1"/>
+            <input class="setup-input" id="homeAddName" placeholder="Player name"/>
+            <select class="setup-select" id="homeAddRole"><option>OH</option><option>OPP</option><option>MB</option><option>S</option><option>L</option><option>DS</option></select>
+            <button class="setup-small-btn" type="button" onclick="addPlayerToRoster('home')">+ Add Player</button>
+          </div>
+          <div class="setup-system-box">
+            <div class="setup-system-title">⚙️ Team Configuration</div>
+            <div class="setup-system-options">
+              <label class="setup-system-option"><input type="radio" name="homeSystem" value="5-1" checked> 5-1 System</label>
+              <label class="setup-system-option"><input type="radio" name="homeSystem" value="6-2"> 6-2 System</label>
+            </div>
+            <div class="setup-system-note">5-1 = one setter. 6-2 = two setters; app shows the active back-row setter.</div>
+          </div>
+          <div class="setup-help">Add players quickly, or paste a full list. Use role <strong>L</strong> for libero — libero is checked directly inside the rotation step.</div>
+        </div>
+
+        <div class="setup-card">
+          <div class="setup-card-title">⚪ Team B / Away</div>
+          <div class="setup-form-grid two">
+            <div class="setup-field"><label class="setup-label">Team Name</label><input class="setup-input" id="setupAwayName" value="Hawks VC"/></div>
+            <div class="setup-field"><label class="setup-label">Short Name</label><input class="setup-input" id="setupAwayShort" value="HWK" maxlength="4"/></div>
+            <div class="setup-field"><label class="setup-label">Coach</label><input class="setup-input" id="setupAwayCoach" placeholder="Coach name"/></div>
+          </div>
+          <div class="setup-field" style="margin-top:12px"><label class="setup-label">Players List</label><textarea class="setup-textarea" id="setupAwayPlayers" oninput="refreshSetupRotation('away')" placeholder="One player per line: 10 - Player Name - OH">2 - Carlos Diaz - S
+5 - Mark Johnson - OH
+8 - Ryan Kim - MB
+10 - Leo Torres - OPP
+12 - Andre Silva - OH
+15 - Diego Cruz - MB</textarea></div>
+          <div class="add-player-row">
+            <input class="setup-input" id="awayAddNum" placeholder="#" type="number" min="1"/>
+            <input class="setup-input" id="awayAddName" placeholder="Player name"/>
+            <select class="setup-select" id="awayAddRole"><option>OH</option><option>OPP</option><option>MB</option><option>S</option><option>L</option><option>DS</option></select>
+            <button class="setup-small-btn" type="button" onclick="addPlayerToRoster('away')">+ Add Player</button>
+          </div>
+          <div class="setup-system-box">
+            <div class="setup-system-title">⚙️ Team Configuration</div>
+            <div class="setup-system-options">
+              <label class="setup-system-option"><input type="radio" name="awaySystem" value="5-1" checked> 5-1 System</label>
+              <label class="setup-system-option"><input type="radio" name="awaySystem" value="6-2"> 6-2 System</label>
+            </div>
+            <div class="setup-system-note">5-1 = one setter. 6-2 = two setters; app shows the active back-row setter.</div>
+          </div>
+          <div class="setup-help">No separate libero field. Put <strong>L</strong> as the role, then the app shows libero warnings in rotation.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="setupStepRotation" class="setup-step">
+      <div class="setup-grid">
+        <div class="setup-card full">
+          <div class="setup-card-title">🎯 First Serve</div>
+          <div class="setup-form-grid two">
+            <div class="setup-field"><label class="setup-label">First Serve</label><select class="setup-select" id="setupFirstServe"><option value="home">Team A / Home</option><option value="away">Team B / Away</option></select></div>
+          </div>
+          <div class="setup-help"><strong>P1 is the first server</strong> for the team selected to serve first.</div>
+        </div>
+
+        <div class="setup-card">
+          <div class="setup-card-title">🔵 Home Starting Rotation</div>
+          <div class="setup-help">Select one player in each position. Layout: front row P4-P3-P2, back row P5-P6-P1.</div>
+          <div class="setup-rotation-wrap">
+            <div class="setup-rotation-title"><span>Home Court</span><span>P1 = server if Home serves</span></div>
+            <div class="setup-court">
+              <div class="setup-slot front"><div class="setup-slot-label">P4</div><select id="hRotP4" onchange="refreshSetupRotation('home')"></select><div class="setup-player-preview" id="hPrevP4"></div></div>
+              <div class="setup-slot front"><div class="setup-slot-label">P3</div><select id="hRotP3" onchange="refreshSetupRotation('home')"></select><div class="setup-player-preview" id="hPrevP3"></div></div>
+              <div class="setup-slot front"><div class="setup-slot-label">P2</div><select id="hRotP2" onchange="refreshSetupRotation('home')"></select><div class="setup-player-preview" id="hPrevP2"></div></div>
+              <div class="setup-slot back"><div class="setup-slot-label">P5</div><select id="hRotP5" onchange="refreshSetupRotation('home')"></select><div class="setup-player-preview" id="hPrevP5"></div></div>
+              <div class="setup-slot back"><div class="setup-slot-label">P6</div><select id="hRotP6" onchange="refreshSetupRotation('home')"></select><div class="setup-player-preview" id="hPrevP6"></div></div>
+              <div class="setup-slot back"><div class="setup-slot-label">P1 First Server</div><select id="hRotP1" onchange="refreshSetupRotation('home')"></select><div class="setup-player-preview" id="hPrevP1"></div></div>
+            </div>
+            <div class="setup-libero-box">
+              <div class="setup-libero-title">🛡️ Home Libero(s)</div>
+              <div class="setup-libero-grid">
+                <div class="setup-libero-field"><label>Libero 1</label><select id="hLibero1"></select></div>
+                <div class="setup-libero-field"><label>Libero 2 optional</label><select id="hLibero2"></select></div>
+              </div>
+              <div class="setup-libero-note">Put your 2 middle blockers in the 6 rotation spots. Select libero separately here.</div>
+            </div>
+            <div class="libero-warning" id="hLiberoWarning">⚠️ Libero is in the front row (P2/P3/P4). Check your rotation.</div>
+          </div>
+        </div>
+
+        <div class="setup-card">
+          <div class="setup-card-title">⚪ Away Starting Rotation</div>
+          <div class="setup-help">Select one player in each position. Layout: front row P4-P3-P2, back row P5-P6-P1.</div>
+          <div class="setup-rotation-wrap">
+            <div class="setup-rotation-title"><span>Away Court</span><span>P1 = server if Away serves</span></div>
+            <div class="setup-court">
+              <div class="setup-slot front"><div class="setup-slot-label">P4</div><select id="aRotP4" onchange="refreshSetupRotation('away')"></select><div class="setup-player-preview" id="aPrevP4"></div></div>
+              <div class="setup-slot front"><div class="setup-slot-label">P3</div><select id="aRotP3" onchange="refreshSetupRotation('away')"></select><div class="setup-player-preview" id="aPrevP3"></div></div>
+              <div class="setup-slot front"><div class="setup-slot-label">P2</div><select id="aRotP2" onchange="refreshSetupRotation('away')"></select><div class="setup-player-preview" id="aPrevP2"></div></div>
+              <div class="setup-slot back"><div class="setup-slot-label">P5</div><select id="aRotP5" onchange="refreshSetupRotation('away')"></select><div class="setup-player-preview" id="aPrevP5"></div></div>
+              <div class="setup-slot back"><div class="setup-slot-label">P6</div><select id="aRotP6" onchange="refreshSetupRotation('away')"></select><div class="setup-player-preview" id="aPrevP6"></div></div>
+              <div class="setup-slot back"><div class="setup-slot-label">P1 First Server</div><select id="aRotP1" onchange="refreshSetupRotation('away')"></select><div class="setup-player-preview" id="aPrevP1"></div></div>
+            </div>
+            <div class="setup-libero-box">
+              <div class="setup-libero-title">🛡️ Away Libero(s)</div>
+              <div class="setup-libero-grid">
+                <div class="setup-libero-field"><label>Libero 1</label><select id="aLibero1"></select></div>
+                <div class="setup-libero-field"><label>Libero 2 optional</label><select id="aLibero2"></select></div>
+              </div>
+              <div class="setup-libero-note">Put your 2 middle blockers in the 6 rotation spots. Select libero separately here.</div>
+            </div>
+            <div class="libero-warning" id="aLiberoWarning">⚠️ Libero is in the front row (P2/P3/P4). Check your rotation.</div>
+          </div>
+        </div>
+
+        <div class="setup-card full">
+          <div class="setup-actions" style="justify-content:flex-end">
+            <button class="setup-btn" onclick="backToTeamInfoSetup()">← Back</button>
+            <button class="setup-btn primary" onclick="startMatch()">🏐 Start Match</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     PAGE 1: MATCH VIEW
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="matchPage" class="page">
+  <div class="match-view">
+    <div class="scorebar">
+      <div class="team-side">
+        <span class="team-name" id="homeName">Eagles FC</span>
+        <span class="serving-badge" id="servingBadge"><span class="serving-dot"></span> SERVING</span>
+        <span class="set-score" id="homeSetScore">P0</span>
+      </div>
+      <div class="score-main">
+        <span class="score-num" id="homeScore">0</span>
+        <span class="score-dash">—</span>
+        <span class="score-num" id="awayScore">0</span>
+      </div>
+      <div class="team-side" style="flex-direction:row-reverse">
+        <span class="team-name" id="awayName">Hawks VC</span>
+        <span class="set-score" id="awaySetScore">P0</span>
+      </div>
+    </div>
+    <div class="set-label" id="setLabel">SET 1</div>
+
+    <div class="main-grid">
+      <!-- LEFT -->
+      <div class="sidebar-left">
+        <div class="sidebar-title">Play-by-Play</div>
+        <div class="pbp-list" id="pbpList"><div style="padding:14px;color:var(--gray);font-size:12px;font-style:italic">No actions yet.</div></div>
+      </div>
+
+      <!-- CENTER -->
+      <div class="center-panel">
+        <div class="court">
+          <div class="court-half home">
+            <div class="player-spot" onclick="clickPlayer('home',9)"><div class="player-pos">P4</div><div class="player-num" id="h-p4">#9</div></div>
+            <div class="player-spot" onclick="clickPlayer('home',7)"><div class="player-pos">P3</div><div class="player-num" id="h-p3">#7</div></div>
+            <div class="player-spot" onclick="clickPlayer('home',4)"><div class="player-pos">P2</div><div class="player-num" id="h-p2">#4</div></div>
+            <div class="player-spot" onclick="clickPlayer('home',11)"><div class="player-pos">P5</div><div class="player-num" id="h-p5">#11</div></div>
+            <div class="player-spot" onclick="clickPlayer('home',14)"><div class="player-pos">P6</div><div class="player-num" id="h-p6">#14</div></div>
+            <div class="player-spot" onclick="clickPlayer('home',1)"><div class="player-pos">P1</div><div class="player-num" id="h-p1">#1</div></div>
+          </div>
+          <div class="court-half away">
+            <div class="player-spot" onclick="clickPlayer('away',5)"><div class="player-pos">P2</div><div class="player-num" id="a-p2">#5</div></div>
+            <div class="player-spot" onclick="clickPlayer('away',8)"><div class="player-pos">P3</div><div class="player-num" id="a-p3">#8</div></div>
+            <div class="player-spot" onclick="clickPlayer('away',10)"><div class="player-pos">P4</div><div class="player-num" id="a-p4">#10</div></div>
+            <div class="player-spot" onclick="clickPlayer('away',2)"><div class="player-pos">P1</div><div class="player-num" id="a-p1">#2</div></div>
+            <div class="player-spot" onclick="clickPlayer('away',15)"><div class="player-pos">P6</div><div class="player-num" id="a-p6">#15</div></div>
+            <div class="player-spot" onclick="clickPlayer('away',12)"><div class="player-pos">P5</div><div class="player-num" id="a-p5">#12</div></div>
+          </div>
+        </div>
+
+        <div class="code-area">
+          <div class="code-hint">Type: <strong>H-A12+</strong> = Home Attack Point · Reception: <strong>R#</strong> Perfect, <strong>R+</strong> Positive, <strong>R-</strong> Negative, <strong>R!</strong> Error · Press <strong>Enter</strong></div>
+          <div class="input-row">
+            <input class="code-field" id="codeField" placeholder="H-A9+ / A-R12# / TA R9+ / TB R12!" />
+            <button class="icon-btn mic-btn" id="micIconBtn" onclick="toggleVoice()">🎙</button>
+            <button class="icon-btn submit-btn" onclick="submitCode()">↵</button>
+          </div>
+        </div>
+
+        <div class="voice-area">
+          <div class="voice-status">
+            <div class="rec-label"><div class="rec-dot" id="recDot"></div><span id="recLabel">LIVE TRANSCRIPT</span></div>
+            <span class="rec-timer" id="recTimer"></span>
+          </div>
+          <div class="detected-bar" id="detectedBar" style="display:none" onclick="scrollConfirm()"><span>✅</span><span id="detectedText">1 action detected — review and confirm</span></div>
+          <div class="confirm-box" id="confirmBox" style="display:none"></div>
+          <div class="transcript empty" id="transcript">Tap mic or type to start…</div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="sidebar-right">
+        <div class="sb-section">
+          <div class="sb-title">Quick Actions</div>
+          <button class="action-btn" onclick="undoLast()">↩ Undo Last</button>
+          <button class="action-btn success" onclick="addPoint('home')">+1 Home</button>
+          <button class="action-btn info" onclick="addPoint('away')">+1 Away</button>
+        </div>
+        <div class="sb-section">
+          <div class="sb-title">Rotation</div>
+          <button class="action-btn" onclick="rotate('home')">↻ Rotate Home</button>
+          <button class="action-btn" onclick="rotate('away')">↻ Rotate Away</button>
+          <div class="rotation-status" id="rotationStatus"></div>
+        </div>
+        <div class="sb-section">
+          <div class="sb-title">Match</div>
+          <button class="action-btn warn" onclick="endSet()">📋 End Set</button>
+          <button class="action-btn info" onclick="showAnalytics()">📊 View Stats</button>
+          <button class="action-btn" onclick="backToSetup()">⚙️ Edit Setup</button>
+        </div>
+        <div class="sb-section" style="border:none">
+          <div class="sb-title">Voice Control</div>
+          <button class="action-btn mic-side" id="voiceSideBtn" onclick="toggleVoice()">🎙 Start Voice</button>
+          <div class="voice-hint">Say: <em>"Eagles player 1 serve ace"</em> or <em>"point home"</em></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     PAGE 2: ANALYTICS VIEW
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="analyticsPage" class="page">
+  <div class="analytics-view">
+    <div class="analytics-header">
+      <div class="analytics-title-area">
+        <span class="analytics-icon">📊</span>
+        <div>
+          <div class="analytics-title">Match Analytics</div>
+          <div class="analytics-subtitle" id="analyticsSubtitle">Eagles FC vs Hawks VC</div>
+        </div>
+      </div>
+      <div class="analytics-actions">
+        <button class="btn-back" onclick="backToMatch()">← Back to Match</button>
+        <button class="btn-export csv" onclick="exportCSV()">📄 CSV</button>
+        <button class="btn-export pdf" onclick="exportPDF()">📕 PDF Report</button>
+      </div>
+    </div>
+
+    <div class="filters-bar">
+      <div class="filter-group">
+        <span class="filter-label">Team</span>
+        <select class="filter-select" id="filterTeam" onchange="applyFilters()">
+          <option value="all">All Teams</option>
+          <option value="home">Eagles FC</option>
+          <option value="away">Hawks VC</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Player</span>
+        <select class="filter-select" id="filterPlayer" onchange="applyFilters()">
+          <option value="all">All Players</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Rotation</span>
+        <select class="filter-select" id="filterRotation" onchange="applyFilters()">
+          <option value="all">All Rotations</option>
+          <option value="1">P1 / Rotation 1</option>
+          <option value="2">P2 / Rotation 2</option>
+          <option value="3">P3 / Rotation 3</option>
+          <option value="4">P4 / Rotation 4</option>
+          <option value="5">P5 / Rotation 5</option>
+          <option value="6">P6 / Rotation 6</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Skill</span>
+        <select class="filter-select" id="filterSkill" onchange="applyFilters()">
+          <option value="all">All Skills</option>
+          <option value="S">Serve</option>
+          <option value="A">Attack</option>
+          <option value="R">Reception</option>
+          <option value="B">Block</option>
+          <option value="D">Dig</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="stats-grid" id="statsCards"></div>
+
+    <div class="player-stats-section" style="margin-bottom:20px">
+      <div class="section-title">Rotation Performance P1–P6</div>
+      <table class="stats-table" id="rotationStatsTable"></table>
+    </div>
+
+    <div class="player-stats-section">
+      <div class="section-title">Player Statistics</div>
+      <table class="stats-table" id="playerStatsTable"></table>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const S={setupDone:false,matchInfo:{competition:'',date:'',venue:'',setsToPlay:5,pointsPerSet:25,tieBreakPoints:15,firstServe:'home',voiceMode:'advanced',autoRotation:'off'},teams:{home:{name:'Eagles FC',short:'EAG',coach:'',system:'5-1',liberos:'',players:[]},away:{name:'Hawks VC',short:'HWK',coach:'',system:'5-1',liberos:'',players:[]}},homeScore:0,awayScore:0,homeSetWins:0,awaySetWins:0,currentSet:1,serving:'home',actions:[],homeRot:[1,4,7,9,11,14],awayRot:[2,5,8,10,12,15],homeRotation:1,awayRotation:1};
+
+
+// ══════════════════════════════════════════
+// SETUP PAGE
+// ══════════════════════════════════════════
+
+function goToRotationSetup(){
+  refreshSetupRotation('home');
+  refreshSetupRotation('away');
+  document.getElementById('setupStepInfo').classList.remove('active');
+  document.getElementById('setupStepRotation').classList.add('active');
+  document.getElementById('setupPillInfo').classList.remove('active');
+  document.getElementById('setupPillRotation').classList.add('active');
+  document.getElementById('setupMainNextBtn').textContent='🏐 Start Match';
+  document.getElementById('setupMainNextBtn').onclick=startMatch;
+}
+function backToTeamInfoSetup(){
+  document.getElementById('setupStepRotation').classList.remove('active');
+  document.getElementById('setupStepInfo').classList.add('active');
+  document.getElementById('setupPillRotation').classList.remove('active');
+  document.getElementById('setupPillInfo').classList.add('active');
+  document.getElementById('setupMainNextBtn').textContent='Next: Rotations →';
+  document.getElementById('setupMainNextBtn').onclick=goToRotationSetup;
+}
+function addPlayerToRoster(side){
+  const pre=side==='home'?'home':'away';
+  const num=document.getElementById(pre+'AddNum').value.trim();
+  const name=document.getElementById(pre+'AddName').value.trim()||('Player '+num);
+  const role=document.getElementById(pre+'AddRole').value.trim().toUpperCase();
+  if(!/^\d+$/.test(num)){showToast('⚠️ Add a valid jersey number');return}
+  const area=document.getElementById(side==='home'?'setupHomePlayers':'setupAwayPlayers');
+  const line=`${num} - ${name} - ${role}`;
+  const existing=area.value.trim();
+  area.value=existing?existing+'\n'+line:line;
+  document.getElementById(pre+'AddNum').value='';
+  document.getElementById(pre+'AddName').value='';
+  refreshSetupRotation(side);
+  showToast('✅ Player added')
+}
+function parsePlayersList(raw){
+  return String(raw||'').split(/\n+/).map(line=>line.trim()).filter(Boolean).map(line=>{
+    const m=line.match(/^(\d+)\s*[-–:]?\s*(.*)$/);
+    if(!m)return {num:'',name:line,position:''};
+    const rest=m[2]||'';
+    const parts=rest.split(/\s*[-–]\s*/);
+    return {num:m[1],name:(parts[0]||('Player '+m[1])).trim(),position:(parts[1]||'').trim().toUpperCase()}
+  })
+}
+function getSetupPlayers(side){
+  const id=side==='home'?'setupHomePlayers':'setupAwayPlayers';
+  return parsePlayersList(document.getElementById(id).value);
+}
+function getPlayerInfo(side,num){
+  const list=getSetupPlayers(side);
+  return list.find(p=>String(p.num)===String(num))||{num:String(num),name:'Player '+num,position:''};
+}
+function fillRotationSelect(selectId,players,selected){
+  const el=document.getElementById(selectId);
+  if(!el)return;
+  const old=String(el.value||selected||'');
+  el.innerHTML='';
+  players.forEach(p=>{
+    const opt=document.createElement('option');
+    opt.value=p.num;
+    opt.textContent='#'+p.num+' '+(p.name||('Player '+p.num))+(p.position?' — '+p.position:'');
+    el.appendChild(opt);
+  });
+  const wanted=String(selected||old||'');
+  if([...el.options].some(o=>o.value===wanted))el.value=wanted;
+}
+function fillLiberoSelect(selectId,players,selected){
+  const el=document.getElementById(selectId);
+  if(!el)return;
+  const old=String(el.value||selected||'');
+  el.innerHTML='';
+
+  const none=document.createElement('option');
+  none.value='';
+  none.textContent='— No libero —';
+  el.appendChild(none);
+
+  const liberos=players.filter(p=>String(p.position||'').toUpperCase()==='L' || String(p.position||'').toUpperCase()==='LIBERO');
+  const list=liberos.length?liberos:players;
+
+  list.forEach(p=>{
+    const opt=document.createElement('option');
+    opt.value=p.num;
+    opt.textContent='#'+p.num+' '+(p.name||('Player '+p.num))+(p.position?' — '+p.position:'');
+    el.appendChild(opt);
+  });
+
+  if([...el.options].some(o=>o.value===old))el.value=old;
+  else if(liberos.length && selectId.endsWith('1'))el.value=liberos[0].num;
+}
+function refreshLiberoSelects(side){
+  const players=getSetupPlayers(side);
+  const prefix=side==='home'?'h':'a';
+  fillLiberoSelect(prefix+'Libero1',players);
+  fillLiberoSelect(prefix+'Libero2',players);
+}
+function getSelectedLiberos(prefix){
+  const l1=document.getElementById(prefix+'Libero1')?.value||'';
+  const l2=document.getElementById(prefix+'Libero2')?.value||'';
+  return [l1,l2].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i);
+}
+function refreshSetupRotation(side){
+  const prefix=side==='home'?'h':'a';
+  const defaults=side==='home'?[1,4,7,9,11,14]:[2,5,8,10,12,15];
+  const players=getSetupPlayers(side);
+  if(players.length===0)return;
+  ['P1','P2','P3','P4','P5','P6'].forEach((pos,i)=>{
+    const selectId=prefix+'Rot'+pos;
+    const current=document.getElementById(selectId)?.value || defaults[i];
+    fillRotationSelect(selectId,players,current);
+    const num=document.getElementById(selectId)?.value || current;
+    const p=getPlayerInfo(side,num);
+    const prev=document.getElementById(prefix+'Prev'+pos);
+    if(prev)prev.innerHTML=`<strong>#${p.num}</strong> ${p.name||''}${p.position?`<span class="role-badge">${p.position}</span>`:''}`;
+  });
+  refreshLiberoSelects(side);
+  validateLiberoFrontRow(side);
+}
+function validateLiberoFrontRow(side){
+  const prefix=side==='home'?'h':'a';
+  const warning=document.getElementById(prefix+'LiberoWarning');
+  if(!warning)return;
+  const front=['P2','P3','P4'];
+  const hasLibero=front.some(pos=>{
+    const num=document.getElementById(prefix+'Rot'+pos)?.value;
+    const p=getPlayerInfo(side,num);
+    return String(p.position||'').toUpperCase().includes('L');
+  });
+  warning.classList.toggle('show',hasLibero);
+}
+function initSetupRotationSelectors(){
+  refreshSetupRotation('home');
+  refreshSetupRotation('away');
+}
+function readRotation(prefix){
+  const vals=['P1','P2','P3','P4','P5','P6'].map(p=>document.getElementById(prefix+'Rot'+p).value.trim()).filter(Boolean);
+  if(vals.length!==6 || vals.some(v=>!/^\d+$/.test(v))){showToast('⚠️ Rotation must have 6 player numbers');return null}
+  if(new Set(vals).size!==6){showToast('⚠️ Each starting rotation must have 6 different players');return null}
+  return vals.map(v=>Number(v))
+}
+function applySetupToUI(){
+  document.getElementById('homeName').textContent=S.teams.home.name;
+  document.getElementById('awayName').textContent=S.teams.away.name;
+  document.getElementById('analyticsSubtitle').textContent=`${S.teams.home.name} vs ${S.teams.away.name}`;
+  const fTeam=document.getElementById('filterTeam');
+  if(fTeam){fTeam.options[1].textContent=S.teams.home.name;fTeam.options[2].textContent=S.teams.away.name}
+  S.homeRotation=1;S.awayRotation=1;
+  S.homeScore=0;S.awayScore=0;S.homeSetWins=0;S.awaySetWins=0;S.currentSet=1;S.actions=[];
+  document.getElementById('homeScore').textContent='0';
+  document.getElementById('awayScore').textContent='0';
+  document.getElementById('homeSetScore').textContent='P0';
+  document.getElementById('awaySetScore').textContent='P0';
+  document.getElementById('setLabel').textContent='SET 1';
+  renderCourt();
+  updateServing();
+  renderRotationStatus();
+  renderPBP();
+}
+function startMatch(){
+  const hRot=readRotation('h');
+  const aRot=readRotation('a');
+  if(!hRot||!aRot)return;
+  S.matchInfo.competition=document.getElementById('setupCompetition').value.trim();
+  S.matchInfo.date=document.getElementById('setupDate').value;
+  S.matchInfo.venue=document.getElementById('setupVenue').value.trim();
+  S.matchInfo.setsToPlay=5;
+  S.matchInfo.pointsPerSet=25;
+  S.matchInfo.tieBreakPoints=15;
+  S.matchInfo.firstServe=document.getElementById('setupFirstServe').value;
+  S.matchInfo.voiceMode='advanced';
+  S.matchInfo.autoRotation='off';
+  S.teams.home.name=document.getElementById('setupHomeName').value.trim()||'Team A';
+  S.teams.home.short=(document.getElementById('setupHomeShort').value.trim()||'H').toUpperCase();
+  S.teams.home.coach=document.getElementById('setupHomeCoach').value.trim();
+  S.teams.home.system=document.querySelector('input[name="homeSystem"]:checked')?.value||'5-1';
+  S.teams.home.players=parsePlayersList(document.getElementById('setupHomePlayers').value);
+  S.teams.home.liberos=getSelectedLiberos('h').join(', ');
+  S.teams.away.name=document.getElementById('setupAwayName').value.trim()||'Team B';
+  S.teams.away.short=(document.getElementById('setupAwayShort').value.trim()||'A').toUpperCase();
+  S.teams.away.coach=document.getElementById('setupAwayCoach').value.trim();
+  S.teams.away.system=document.querySelector('input[name="awaySystem"]:checked')?.value||'5-1';
+  S.teams.away.players=parsePlayersList(document.getElementById('setupAwayPlayers').value);
+  S.teams.away.liberos=getSelectedLiberos('a').join(', ');
+  S.homeRot=hRot;S.awayRot=aRot;S.serving=S.matchInfo.firstServe;
+  S.setupDone=true;
+  applySetupToUI();
+  document.getElementById('setupPage').classList.remove('active');
+  document.getElementById('matchPage').classList.add('active');
+  showToast('🏐 Match started')
+}
+function quickStartMatch(){startMatch()}
+function backToSetup(){
+  document.getElementById('matchPage').classList.remove('active');
+  document.getElementById('analyticsPage').classList.remove('active');
+  document.getElementById('setupPage').classList.add('active')
+}
+
+// ══════════════════════════════════════════
+// VOICE
+// ══════════════════════════════════════════
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let recog=null,recording=false,timerInt=null,timerSecs=0,liveText='',pendingActions=[];
+
+const SKILLS={serve:'Serve',serving:'Serve',attack:'Attack',spike:'Attack',kill:'Attack',reception:'Reception',receive:'Reception',pass:'Reception',block:'Block',dig:'Dig',set:'Set',freeball:'Freeball',pipe:'Pipe'};
+const EVALS={perfect:'#',excellent:'#',ace:'+',kill:'+',positive:'+',good:'+',great:'+',error:'-',mistake:'-',bad:'-',failed:'-',miss:'-',out:'-',negative:'-',fault:'-',neutral:'=',ok:'=',okay:'=',average:'=',continue:'='};
+
+function toggleVoice(){recording?stopVoice():startVoice()}
+function startVoice(){
+  if(!SR){setTranscript('⚠️ Need Chrome/Edge for voice. Type manually.',true);return}
+  if(location.protocol==='http:'&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){
+    setTranscript('⚠️ Voice needs HTTPS or localhost.',true);return
+  }
+
+  liveText='';
+  pendingActions=[];
+  hideConfirm();
+
+  recog=new SR();
+  recog.continuous=true;
+  recog.interimResults=true;
+  recog.lang='en-US';
+
+  recog.onstart=()=>{
+    recording=true;
+    setMicUI(true);
+    setTranscript('🎙 Listening… speak the full rally, then say "point" or press Stop.',false);
+    timerSecs=0;
+    timerInt=setInterval(()=>{
+      timerSecs++;
+      document.getElementById('recTimer').textContent=String(Math.floor(timerSecs/60)).padStart(2,'0')+':'+String(timerSecs%60).padStart(2,'0')
+    },1000)
+  };
+
+  recog.onresult=(e)=>{
+    let interim='',final='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const t=e.results[i][0].transcript;
+      e.results[i].isFinal?final+=t+' ':interim+=t
+    }
+    if(final)liveText+=final;
+
+    const display=(liveText+interim).trim();
+    setTranscript(display||'🎙 Listening…',false);
+
+    if(final){
+      parseMultiAction(liveText.trim());
+      updateRecordingCounter();
+
+      if(hasRallyEnd(final)){
+        stopVoice(true);
+      }
+    }
+  };
+
+  recog.onerror=(e)=>{
+    const msgs={'not-allowed':'Mic denied','no-speech':'No speech detected','network':'Network error','aborted':'Stopped'};
+    setTranscript('⚠️ '+(msgs[e.error]||'Error: '+e.error),true);
+    stopVoice(false)
+  };
+
+  recog.onend=()=>{if(recording){try{recog.start()}catch(e){}}};
+  try{recog.start()}catch(e){setTranscript('⚠️ Mic error: '+e.message,true)}
+}
+
+async function stopVoice(showPreview=true){
+  recording=false;
+  clearInterval(timerInt);
+  document.getElementById('recTimer').textContent='';
+  setMicUI(false);
+  if(recog){try{recog.stop()}catch(e){}recog=null}
+
+  if(liveText.trim()){
+    await processVoiceInput(liveText.trim());
+  }
+  if(showPreview && pendingActions.length>0){
+    showConfirm(pendingActions);
+    setTranscript(`✅ ${pendingActions.length} action${pendingActions.length>1?'s':''} detected. Review and confirm.`,false)
+  }else if(showPreview){
+    setTranscript('No complete actions detected. Try: Team A player 8 serve positive.',true)
+  }
+}
+
+function setMicUI(on){
+  document.getElementById('micIconBtn').classList.toggle('recording',on);
+  document.getElementById('voiceSideBtn').classList.toggle('recording',on);
+  document.getElementById('voiceSideBtn').textContent=on?'⏹ Stop Voice':'🎙 Start Voice';
+  document.getElementById('recDot').classList.toggle('active',on);
+  document.getElementById('recLabel').textContent=on?'RECORDING…':'LIVE TRANSCRIPT'
+}
+function setTranscript(text,empty){const el=document.getElementById('transcript');el.textContent=text;el.className='transcript'+(empty?' empty':'')}
+function hideConfirm(){document.getElementById('detectedBar').style.display='none';document.getElementById('confirmBox').style.display='none'}
+function updateRecordingCounter(){
+  if(recording){
+    const n=pendingActions.length;
+    document.getElementById('recLabel').textContent=n>0?`RECORDING… (${n} action${n>1?'s':''})`:'RECORDING…'
+  }
+}
+function hasRallyEnd(text){
+  const l=text.toLowerCase();
+  return /\b(point|rally over|end rally|kill|ace|perfect|error|mistake|failed|miss|out|fault)\b/.test(l)
+}
+function teamInfo(side){
+  const name=side==='away'?document.getElementById('awayName').textContent:document.getElementById('homeName').textContent;
+  return {side,name,label:side==='away'?'A':'H'}
+}
+
+// ══════════════════════════════════════════
+// AI VOICE ASSISTANT PARSER
+// ══════════════════════════════════════════
+// For quick testing, replace YOUR_API_KEY_HERE with your OpenAI API key.
+// For a real product, do NOT expose the API key in frontend code; use a backend/proxy.
+const OPENAI_API_KEY='YOUR_API_KEY_HERE';
+const USE_AI_VOICE=true;
+
+async function processVoiceInput(text){
+  // Hybrid mode: AI first, old parser as fallback.
+  if(USE_AI_VOICE && OPENAI_API_KEY && OPENAI_API_KEY!=='YOUR_API_KEY_HERE'){
+    try{
+      await processVoiceWithAI(text);
+
+      // If AI returns nothing, use the old parser automatically.
+      if(pendingActions.length===0){
+        console.log('AI returned no actions, using fallback parser');
+        parseMultiAction(text);
+      }
+      return;
+    }catch(err){
+      console.error('AI voice parser failed, using fallback parser:',err);
+      showToast('⚠️ AI failed — fallback parser used');
+      parseMultiAction(text);
+      return;
+    }
+  }
+
+  // Fallback parser keeps the app working without an API key.
+  parseMultiAction(text);
+}
+
+
+async function processVoiceWithAI(text){
+  console.log('Sending to AI:', text);
+  setTranscript('🧠 AI is checking the rally…',false);
+
+  const homeName=document.getElementById('homeName').textContent;
+  const awayName=document.getElementById('awayName').textContent;
+
+  const res=await fetch('https://api.openai.com/v1/chat/completions',{
+    method:'POST',
+    headers:{
+      'Authorization':'Bearer '+OPENAI_API_KEY,
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify({
+      model:'gpt-4o-mini',
+      temperature:0,
+      messages:[
+        {
+          role:'system',
+          content:`You are a volleyball scout voice parser.
+Convert messy live speech into structured volleyball actions.
+
+Teams:
+- Team A = home = ${homeName}
+- Team B = away = ${awayName}
+
+Rules:
+- Preserve action order exactly.
+- Team is sticky: if the speaker says Team B once, following player-only actions stay Team B until Team A is said.
+- Understand jersey numbers as digits or words: one=1, two=2, etc.
+- Skills allowed: Serve, Reception, Set, Attack, Block, Dig, Freeball, Pipe, Point.
+- Evaluations allowed: Perfect, Positive, Continue, Neutral, Negative, Error, Kill, Ace, Block Point, Point.
+- "serve continue" = Serve + Continue, not a point.
+- "perfect" = Perfect and becomes a point for that team.
+- "attack kill" = Attack + Kill.
+- "attack perfect kill" = Attack + Kill.
+- "serve ace" = Serve + Ace.
+- "block point" = Block + Block Point.
+- If team is missing at the beginning and cannot be inferred, skip that action.
+
+Return ONLY a valid JSON array. No markdown. No explanation.
+Schema:
+[{"team":"A","player":9,"skill":"Serve","evaluation":"Continue"}]`
+        },
+        {role:'user',content:text}
+      ]
+    })
+  });
+
+  if(!res.ok){
+    const errTxt=await res.text();
+    throw new Error('OpenAI API error '+res.status+': '+errTxt);
+  }
+
+  const data=await res.json();
+  console.log('AI raw response:', data);
+  let content=(data.choices?.[0]?.message?.content||'').trim();
+  content=content.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```$/,'').trim();
+
+  let output;
+  try{
+    output=JSON.parse(content);
+  }catch(e){
+    const match=content.match(/\[[\s\S]*\]/);
+    if(match){
+      output=JSON.parse(match[0]);
+    }else{
+      throw new Error('AI returned invalid JSON: '+content);
+    }
+  }
+
+  applyActionsFromAI(output);
+}
+
+function applyActionsFromAI(actions){
+  pendingActions=[];
+  if(!Array.isArray(actions))return;
+
+  actions.forEach(a=>{
+    if(!a)return;
+    const teamRaw=String(a.team||'').trim().toUpperCase();
+    const side=teamRaw==='B'||teamRaw==='AWAY'?'away':'home';
+
+    const player=String(a.player||a.playerNum||'').replace(/\D/g,'');
+    const skillRaw=String(a.skill||'').trim();
+    const evaluationRaw=String(a.evaluation||'').trim();
+    if(!skillRaw || (!player && skillRaw.toLowerCase()!=='point'))return;
+
+    const skill=normalizeAISkill(skillRaw);
+    const evaluation=normalizeAIEvaluation(evaluationRaw,skill);
+    const evalSym=symbolFromEvaluation(evaluation);
+    const skillLetter=skill==='Set'?'ST':skill.charAt(0).toUpperCase();
+    const code=skill==='Point'?(side==='home'?'H-PT+':'A-PT+'):(skillLetter+player+evalSym);
+    const teamName=side==='home'?document.getElementById('homeName').textContent:document.getElementById('awayName').textContent;
+
+    pendingActions.push({
+      team:teamName,
+      teamSide:side,
+      playerNum:player,
+      skill,
+      evaluation,
+      evalSym,
+      code,
+      transcript:liveText,
+      text: skill==='Point' ? `${teamName} point` : `${teamName}: #${player} ${skill} → ${evaluation}`
+    });
+  });
+}
+
+function normalizeAISkill(skill){
+  const s=String(skill||'').toLowerCase();
+  if(s.includes('rece')||s.includes('pass'))return 'Reception';
+  if(s.includes('serve'))return 'Serve';
+  if(s.includes('attack')||s.includes('spike')||s.includes('hit')||s.includes('kill'))return 'Attack';
+  if(s.includes('block'))return 'Block';
+  if(s.includes('dig')||s.includes('defense'))return 'Dig';
+  if(s.includes('set'))return 'Set';
+  if(s.includes('free'))return 'Freeball';
+  if(s.includes('pipe'))return 'Pipe';
+  if(s.includes('point'))return 'Point';
+  return skill.charAt(0).toUpperCase()+skill.slice(1).toLowerCase();
+}
+
+function normalizeAIEvaluation(evaluation,skill){
+  const e=String(evaluation||'').toLowerCase();
+  if(skill==='Point')return 'Point';
+  if(e.includes('block')&&e.includes('point'))return 'Block Point';
+  if(e.includes('kill'))return 'Kill';
+  if(e.includes('ace'))return 'Ace';
+  if(e.includes('perfect')||e.includes('excellent'))return 'Perfect';
+  if(e.includes('positive')||e.includes('good')||e.includes('great'))return 'Positive';
+  if(e.includes('error')||e.includes('fault')||e.includes('mistake')||e.includes('out'))return 'Error';
+  if(e.includes('negative')||e.includes('bad')||e.includes('poor'))return 'Negative';
+  if(e.includes('continue'))return 'Continue';
+  if(e.includes('neutral')||e.includes('average')||e.includes('ok'))return 'Neutral';
+  return evaluation||'Neutral';
+}
+
+function symbolFromEvaluation(evaluation){
+  const e=String(evaluation||'').toLowerCase();
+  if(e==='perfect')return '#';
+  if(e.includes('kill')||e.includes('ace')||e.includes('point')||e.includes('positive'))return '+';
+  if(e.includes('error')||e.includes('negative'))return '-';
+  return '=';
+}
+
+// CONTINUOUS MULTI-ACTION PARSER
+function normalizeNumberWord(word){
+  const map={
+    zero:'0',one:'1',two:'2',three:'3',four:'4',five:'5',six:'6',seven:'7',eight:'8',nine:'9',ten:'10',
+    eleven:'11',twelve:'12',thirteen:'13',fourteen:'14',fifteen:'15',sixteen:'16',seventeen:'17',eighteen:'18',nineteen:'19',twenty:'20',
+    won:'1',to:'2',too:'2',tree:'3',for:'4',ate:'8'
+  };
+  return map[String(word||'').toLowerCase()]||null;
+}
+function isNumberToken(tok){
+  return /^#?\d+$/.test(tok)||normalizeNumberWord(tok)!==null;
+}
+function tokenIsSkill(tok){
+  tok=String(tok||'').toLowerCase();
+  return Object.keys(SKILLS).some(w=>tok===w||tok.startsWith(w)||w.startsWith(tok));
+}
+function tokenIsEval(tok){
+  tok=String(tok||'').toLowerCase();
+  return Object.keys(EVALS).some(w=>tok===w||tok.startsWith(w)||w.startsWith(tok));
+}
+
+// CONTINUOUS MULTI-ACTION PARSER
+function splitTranscriptIntoActions(text){
+  let t=' '+text.toLowerCase().replace(/#/g,' # ').replace(/\s+/g,' ').trim()+' ';
+
+  // Start a new rough segment when a new team is spoken.
+  t=t.replace(/\s+(?=(team\s+[ab]\b|home\b|away\b|eagles\b|hawks\b))/g,' | ');
+
+  let rough=t
+    .split(/\s*\|\s*|[,.]|\s+then\s+|\s+after that\s+|\s+next\s+/)
+    .map(x=>x.trim())
+    .filter(Boolean);
+
+  const final=[];
+
+  rough.forEach(seg=>{
+    const tokens=seg.split(' ').filter(Boolean);
+    let current=[];
+    let hasSkill=false;
+    let hasEval=false;
+
+    for(let i=0;i<tokens.length;i++){
+      const tok=tokens[i];
+      const next=tokens[i+1]||'';
+
+      const startsWithPlayerKeyword=(tok==='player'||tok==='number'||tok==='num'||tok==='#') && isNumberToken(next);
+      const startsWithBareNumber=isNumberToken(tok);
+
+      // If we already completed one action, a new number/player starts the next action.
+      const newActionStart=current.length>0 && hasSkill && hasEval && (startsWithPlayerKeyword || startsWithBareNumber);
+
+      if(newActionStart){
+        final.push(current.join(' ').trim());
+        current=[];
+        hasSkill=false;
+        hasEval=false;
+      }
+
+      current.push(tok);
+      if(tokenIsSkill(tok))hasSkill=true;
+      if(tokenIsEval(tok))hasEval=true;
+    }
+
+    if(current.length)final.push(current.join(' ').trim());
+  });
+
+  return final.filter(x=>x.length>2);
+}
+
+function parseMultiAction(text){
+  const homeName=document.getElementById('homeName').textContent.toLowerCase();
+  const awayName=document.getElementById('awayName').textContent.toLowerCase();
+  pendingActions=[];
+
+  let currentTeamSide=null;
+  let currentTeamName=null;
+  const parts=splitTranscriptIntoActions(text);
+
+  parts.forEach((segment)=>{
+    const trimmed=segment.trim();
+
+    // Sticky team memory: once Team B is said, following player-only actions stay Team B until Team A is said.
+    if(/team\s+a\b|\bhome\b/.test(trimmed)||trimmed.includes(homeName.split(' ')[0])){
+      currentTeamSide='home';
+      currentTeamName=document.getElementById('homeName').textContent;
+    }else if(/team\s+b\b|\baway\b/.test(trimmed)||trimmed.includes(awayName.split(' ')[0])){
+      currentTeamSide='away';
+      currentTeamName=document.getElementById('awayName').textContent;
+    }
+
+    const pointHome=/point\s+(home|team\s*a)|(?:home|team\s*a)\s+point/.test(trimmed);
+    const pointAway=/point\s+(away|team\s*b)|(?:away|team\s*b)\s+point/.test(trimmed);
+    if(pointHome||pointAway){
+      const side=pointAway?'away':'home';
+      const info=teamInfo(side);
+      pendingActions.push({team:info.name,teamSide:side,playerNum:'',skill:'Point',evaluation:'Point',evalSym:'+',code:info.label+'-PT+',text:`${info.name} point`,transcript:segment,voicePoint:true});
+      currentTeamSide=side;
+      currentTeamName=info.name;
+      return;
+    }
+
+    // Safety: no action is accepted before a team is known.
+    if(!currentTeamSide)return;
+    if(!currentTeamName)currentTeamName=teamInfo(currentTeamSide).name;
+
+    // Player number: accepts digits and spoken numbers (one, two, ten...).
+    let playerNum=null;
+    const pMatch=trimmed.match(/(?:player|number|num|#)\s*#?\s*(\d+|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|won|to|too|tree|for|ate)\b/);
+    if(pMatch)playerNum=/^\d+$/.test(pMatch[1])?pMatch[1]:normalizeNumberWord(pMatch[1]);
+    if(!playerNum){
+      const words=trimmed.split(/\s+/);
+      for(const w of words){
+        if(/^\d+$/.test(w)){playerNum=w;break}
+        const nw=normalizeNumberWord(w);
+        if(nw){playerNum=nw;break}
+      }
+    }
+
+    let skill=null;
+    for(const [word,mapped] of Object.entries(SKILLS)){
+      if(trimmed.includes(word)){skill=mapped;break}
+    }
+
+    let evaluation=null,evalSym=null,bestEvalIndex=-1;
+    for(const [word,sym] of Object.entries(EVALS)){
+      const idx=trimmed.lastIndexOf(word);
+      if(idx!==-1 && idx>bestEvalIndex){
+        evaluation=word.charAt(0).toUpperCase()+word.slice(1);
+        if(evaluation==='Excellent')evaluation='Perfect';
+        evalSym=sym;
+        bestEvalIndex=idx;
+      }
+    }
+
+    if(!playerNum||!skill||!evaluation)return;
+
+    let skillLetter=skill.charAt(0);
+    if(skill==='Set')skillLetter='ST';
+    const code=skillLetter+playerNum+evalSym;
+
+    pendingActions.push({
+      team:currentTeamName,
+      teamSide:currentTeamSide,
+      playerNum,
+      skill,
+      evaluation,
+      evalSym,
+      code,
+      transcript:segment,
+      text:`${currentTeamName}: #${playerNum} ${skill} → ${evaluation}`
+    });
+  });
+}
+function showConfirm(actions){
+  const el=document.getElementById('confirmBox');
+  el.style.display='block';
+
+  const rows=actions.map(a=>{
+    const evalClass=a.evalSym==='+'?'eval-pos':a.evalSym==='-'?'eval-neg':'eval-neu';
+    const playerText=a.playerNum?`#${a.playerNum}`:'—';
+    return `
+      <div class="confirm-grid" style="margin-bottom:8px">
+        <div class="cg-cell"><div class="cg-label">Team</div><div class="cg-val">${a.team}</div></div>
+        <div class="cg-cell"><div class="cg-label">Player</div><div class="cg-val">${playerText}</div></div>
+        <div class="cg-cell"><div class="cg-label">Skill</div><div class="cg-val">${a.skill}</div></div>
+        <div class="cg-cell"><div class="cg-label">Evaluation</div><div class="cg-val"><span class="eval-badge ${evalClass}">${a.evaluation}</span></div></div>
+        <div class="cg-cell"><div class="cg-label">Code</div><div class="cg-val"><span class="code-display">${a.code}</span></div></div>
+      </div>`
+  }).join('');
+
+  el.innerHTML=`
+    ${rows}
+    <div style="font-size:11px;color:var(--gray);font-style:italic;margin-bottom:8px">"${liveText.trim()}"</div>
+    <div class="confirm-btns">
+      <button class="btn-save" onclick="confirmActions()">✓ Confirm All (${actions.length})</button>
+      <button class="btn-discard" onclick="discardActions()">Discard</button>
+    </div>`;
+
+  document.getElementById('detectedBar').style.display='flex';
+  document.getElementById('detectedText').textContent=`${actions.length} action${actions.length>1?'s':''} detected — review and confirm`
+}
+
+// SCORING RULES
+// Only terminal point actions should update score.
+// A+ = attack kill point, B+ = block point, S ace = serve ace point, Point = point.
+// # = point to same team. - / ! = point to opponent. R+, D+, Set+ = quality/action saved but no score.
+function getPointWinnerSide(action){
+  const skill=(action.skill||'').toLowerCase();
+  const evaluation=(action.evaluation||'').toLowerCase();
+  const sym=action.evalSym || action.sym || '=';
+  const actionTeam=action.teamSide;
+  if(!actionTeam)return null;
+
+  // ✅ Quick/explicit point command
+  if(skill==='point')return actionTeam;
+
+  // ✅ Perfect (#) gives point to the same team
+  if(sym==='#' || evaluation==='perfect')return actionTeam;
+
+  // ✅ Kill / ace / block point gives point to the same team
+  if(sym==='+' && (skill==='attack' || skill==='block'))return actionTeam;
+  if(sym==='+' && skill==='serve' && (evaluation==='ace' || action.fromManual===true))return actionTeam;
+
+  // ❌ Error (- or !) gives point to opponent
+  if(sym==='-' || sym==='!' || evaluation==='error' || evaluation==='mistake' || evaluation==='failed' || evaluation==='miss' || evaluation==='out' || evaluation==='fault'){
+    return getOppositeSide(actionTeam);
+  }
+
+  return null;
+}
+
+function isPointAction(action){
+  return !!getPointWinnerSide(action);
+}
+
+function getCurrentSetterPositionForAction(side){
+  const setter=getSetterInfo(side);
+  return setter ? Number(String(setter.position).replace('P','')) : null;
+}
+
+function getCurrentRotationNumber(side){
+  return side==='home' ? S.homeRotation : S.awayRotation;
+}
+
+function getOppositeSide(side){
+  return side==='home'?'away':'home';
+}
+
+function buildPointPhaseMeta(winnerSide){
+  const servingBefore=S.serving;
+  const receivingBefore=getOppositeSide(servingBefore);
+  const sideOutWon=winnerSide===receivingBefore;
+  const breakPointWon=winnerSide===servingBefore;
+
+  // IMPORTANT: save rotations BEFORE the point changes serve/rotation.
+  // This is what allows real P1–P6 performance stats later.
+  const homeRotationBefore=S.homeRotation;
+  const awayRotationBefore=S.awayRotation;
+
+  return {
+    servingBefore,
+    receivingBefore,
+    winnerSide,
+    sideOutTeam:receivingBefore,
+    sideOutWon,
+    breakPointTeam:servingBefore,
+    breakPointWon,
+    homeRotationBefore,
+    awayRotationBefore,
+    servingRotationBefore:servingBefore==='home'?homeRotationBefore:awayRotationBefore,
+    receivingRotationBefore:receivingBefore==='home'?homeRotationBefore:awayRotationBefore
+  };
+}
+
+function addActionRecord(a, pointAction, autoRotation, phaseMeta=null){
+  S.actions.unshift({
+    score:getScore(),
+    code:a.code,
+    text:a.text,
+    evalSym:a.evalSym || a.sym || '=',
+    teamSide:a.teamSide,
+    set:S.currentSet,
+    skill:a.skill,
+    playerNum:a.playerNum || a.num || '',
+    evaluation:a.evaluation || '',
+    pointAction,
+    pointWinnerSide:phaseMeta?.winnerSide || (pointAction ? a.teamSide : ''),
+    autoRotation,
+    phaseMeta,
+    servingBefore:phaseMeta?.servingBefore || '',
+    receivingBefore:phaseMeta?.receivingBefore || '',
+    sideOutTeam:phaseMeta?.sideOutTeam || '',
+    sideOutWon:phaseMeta?.sideOutWon || false,
+    breakPointTeam:phaseMeta?.breakPointTeam || '',
+    breakPointWon:phaseMeta?.breakPointWon || false,
+    homeRotationBefore:phaseMeta?.homeRotationBefore || S.homeRotation,
+    awayRotationBefore:phaseMeta?.awayRotationBefore || S.awayRotation,
+    servingRotationBefore:phaseMeta?.servingRotationBefore || '',
+    receivingRotationBefore:phaseMeta?.receivingRotationBefore || '',
+    rotationBefore:phaseMeta ? (a.teamSide==='home'?phaseMeta.homeRotationBefore:phaseMeta.awayRotationBefore) : getCurrentRotationNumber(a.teamSide),
+    rotation:getCurrentRotationNumber(a.teamSide),
+    setterPosition:getCurrentSetterPositionForAction(a.teamSide)
+  });
+}
+
+function confirmActions(){
+  if(!pendingActions.length)return;
+  const count=pendingActions.length;
+  pendingActions.forEach(a=>{
+    const pointWinner=getPointWinnerSide(a);
+    const pointAction=!!pointWinner;
+    const phaseMeta=pointAction?buildPointPhaseMeta(pointWinner):null;
+    const autoRotation=pointAction?bumpScore(pointWinner):null;
+    addActionRecord(a,pointAction,autoRotation,phaseMeta);
+  });
+  renderPBP();
+  pendingActions=[];
+  liveText='';
+  hideConfirm();
+  setTranscript(`✅ Saved ${count} action${count>1?'s':''}!`,false);
+  showToast(`✅ Saved ${count} action${count>1?'s':''}`)
+}
+
+function discardActions(){
+  pendingActions=[];
+  liveText='';
+  hideConfirm();
+  setTranscript('Discarded. Ready for next rally.',true)
+}
+function scrollConfirm(){document.getElementById('confirmBox').scrollIntoView({behavior:'smooth'})}
+
+// CODE INPUT
+document.getElementById('codeField').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitCode()}});
+function submitCode(){
+  const raw=document.getElementById('codeField').value.trim();
+  if(!raw)return;
+  const p=parseCode(raw);
+  if(p){
+    const pointWinner=getPointWinnerSide(p);
+    const pointAction=!!pointWinner;
+    const phaseMeta=pointAction?buildPointPhaseMeta(pointWinner):null;
+    const autoRotation=pointAction?bumpScore(pointWinner):null;
+    addActionRecord({code:p.code,text:p.text,evalSym:p.sym,teamSide:p.teamSide,skill:p.skill,playerNum:p.num,evaluation:p.evaluation},pointAction,autoRotation,phaseMeta);
+    renderPBP();
+    showToast(pointAction?'✅ Point to '+(pointWinner==='home'?S.teams.home.short:S.teams.away.short)+': '+p.code:'✅ Saved: '+p.code)
+  }
+  document.getElementById('codeField').value=''
+}
+function parseCode(raw){
+  let r=raw.toUpperCase().trim();
+  const SMAP={S:'Serve',A:'Attack',R:'Reception',B:'Block',D:'Dig',F:'Freeball'};
+
+  // Manual team prefixes supported:
+  // Home: H-A9+, HOME A9+, TA A9+, TEAM A A9+
+  // Away: A-R12+, AWAY R12+, W R12+, TB R12+, TEAM B R12+
+  let teamSide='home';
+  let teamLabel='H';
+
+  const teamMatch=r.match(/^(HOME|H|TA|TEAM\s*A|AWAY|W|TB|TEAM\s*B)\s*[-:]?\s*(.+)$/i);
+  if(teamMatch){
+    const prefix=teamMatch[1].replace(/\s+/g,'');
+    r=teamMatch[2].trim();
+    if(prefix==='AWAY'||prefix==='W'||prefix==='TB'||prefix==='TEAMB'){
+      teamSide='away';
+      teamLabel='A';
+    }else{
+      teamSide='home';
+      teamLabel='H';
+    }
+  }
+
+  const m=r.match(/^([SARBDF])(\d+)([+\-=#!])?/i);
+  if(!m){
+    showToast('⚠️ Use: H-A9+ or A-R12+');
+    return null;
+  }
+
+  const sl=m[1].toUpperCase(),num=m[2],sym=m[3]||'=';
+  const skill=SMAP[sl]||sl;
+  let evalWord='Neutral';
+  if(sym==='#')evalWord='Perfect';
+  if(sym==='!')evalWord='Error';
+  if(sym==='-')evalWord=(sl==='R'?'Negative':'Error');
+  if(sym==='+'){
+    if(sl==='A')evalWord='Kill';
+    else if(sl==='S')evalWord='Ace';
+    else if(sl==='B')evalWord='Block Point';
+    else evalWord='Positive';
+  }
+
+  const teamName=teamSide==='home'?document.getElementById('homeName').textContent:document.getElementById('awayName').textContent;
+  const code=teamLabel+'-'+sl+num+sym;
+  return{code,text:`${teamName} #${num} ${skill} → ${evalWord}`,sym,evalSym:sym,evaluation:evalWord,teamSide,skill,num,fromManual:true}
+}
+
+
+// LIVE ROTATION / SETTER / LIBERO TRACKING
+function getTeamPlayers(side){
+  const saved = side === 'home' ? S.teams.home.players : S.teams.away.players;
+  if(saved && saved.length) return saved;
+  return getSetupPlayers(side);
+}
+function getPlayerByNumber(side,num){
+  const players=getTeamPlayers(side);
+  return players.find(p=>String(p.num)===String(num)) || {num:String(num),name:'Player '+num,position:''};
+}
+function getPlayerPositionInfo(side,role){
+  const rot=side==='home'?S.homeRot:S.awayRot;
+  const wanted=String(role||'').toUpperCase();
+  for(let i=0;i<rot.length;i++){
+    const p=getPlayerByNumber(side,rot[i]);
+    const pos=String(p.position||'').toUpperCase();
+    if(pos===wanted || (wanted==='L' && (pos==='LIBERO' || pos==='L'))){
+      return {player:p,position:'P'+(i+1),index:i};
+    }
+  }
+  return null;
+}
+function getTeamSystem(side){
+  return (side==='home'?S.teams.home.system:S.teams.away.system) || '5-1';
+}
+function getAllSetterInfos(side){
+  const rot=side==='home'?S.homeRot:S.awayRot;
+  const setters=[];
+  rot.forEach((num,i)=>{
+    const p=getPlayerByNumber(side,num);
+    const role=String(p.position||'').toUpperCase();
+    if(role==='S' || role==='SETTER'){
+      setters.push({player:p,position:'P'+(i+1),index:i});
+    }
+  });
+  return setters;
+}
+function getSetterInfo(side){
+  const system=getTeamSystem(side);
+  const setters=getAllSetterInfos(side);
+  if(!setters.length)return null;
+
+  // In 6-2, the active setter should be the setter in the back row: P1, P5, or P6.
+  if(system==='6-2'){
+    const active=setters.find(s=>['P1','P5','P6'].includes(s.position));
+    return active || setters[0];
+  }
+
+  // In 5-1, there is normally one setter.
+  return setters[0];
+}
+function getSystemWarning(side){
+  const system=getTeamSystem(side);
+  const setters=getAllSetterInfos(side);
+  if(system==='5-1' && setters.length===0)return '⚠️ No setter selected in the 6 rotation players';
+  if(system==='6-2' && setters.length<2)return '⚠️ 6-2 needs two players with role S in the 6 rotation players';
+  return '';
+}
+function getLiberoWarnings(side){
+  const rot=side==='home'?S.homeRot:S.awayRot;
+  const warnings=[];
+  const frontPositions=['P2','P3','P4'];
+  rot.forEach((num,i)=>{
+    const p=getPlayerByNumber(side,num);
+    const role=String(p.position||'').toUpperCase();
+    const pos='P'+(i+1);
+    if((role==='L'||role==='LIBERO') && frontPositions.includes(pos)){
+      warnings.push(`#${p.num} ${p.name||''} in ${pos}`.trim());
+    }
+  });
+  return warnings;
+}
+function renderRotationStatus(){
+  updateRotationBadges();
+  const el=document.getElementById('rotationStatus');
+  if(!el)return;
+  const build=(side)=>{
+    const name=side==='home'?S.teams.home.name:S.teams.away.name;
+    const system=getTeamSystem(side);
+    const setter=getSetterInfo(side);
+    const liberoWarn=getLiberoWarnings(side);
+    const systemWarn=getSystemWarning(side);
+    const setterText=setter?`Setter <strong>#${setter.player.num}</strong> in <strong>${setter.position}</strong>`:'Setter not found';
+    const liberoText=liberoWarn.length?`<span class="warn">⚠️ Libero front row: ${liberoWarn.join(', ')}</span>`:`<span class="ok">Libero OK</span>`;
+    const warnText=systemWarn?`<br><span class="warn">${systemWarn}</span>`:'';
+    return `<div class="rotation-status-row"><strong>${name}</strong> · ${system}<br>${setterText}<br>${liberoText}${warnText}</div>`;
+  };
+  el.innerHTML=build('home')+build('away');
+}
+
+// SCORE
+function bumpScore(side){
+  const previousServer=S.serving;
+  let autoRotation=null;
+
+  if(side==='home'){
+    S.homeScore++;
+    const el=document.getElementById('homeScore');
+    el.textContent=S.homeScore;
+    flashScore(el);
+  }else{
+    S.awayScore++;
+    const el=document.getElementById('awayScore');
+    el.textContent=S.awayScore;
+    flashScore(el);
+  }
+
+  // Official rule: if the receiving team wins the rally, they rotate before serving.
+  if(side!==previousServer){
+    autoRotation=rotate(side,{silent:true,auto:true});
+    showToast('↻ Side-out: '+(side==='home'?S.teams.home.name:S.teams.away.name)+' rotated');
+  }
+
+  S.serving=side;
+  updateServing();
+  renderCourt();
+  renderRotationStatus();
+  return autoRotation;
+}
+function flashScore(el){el.classList.add('bump');setTimeout(()=>el.classList.remove('bump'),400)}
+function updateServing(){
+  const badge=document.getElementById('servingBadge');
+  const homeSide=document.querySelector('.team-side:first-child');
+  const awaySide=document.querySelector('.team-side:last-child');
+  if(S.serving==='home'){
+    badge.style.display='flex';
+    homeSide.appendChild(badge);
+  }else{
+    badge.style.display='flex';
+    awaySide.appendChild(badge);
+  }
+  updateRotationBadges();
+}
+
+function setterBadgeText(side){
+  const setter=getSetterInfo(side);
+  const setterPos=setter?setter.position:'N/A';
+  return `Setter ${setterPos}`;
+}
+
+function updateRotationBadges(){
+  const homeBadge=document.getElementById('homeSetScore');
+  const awayBadge=document.getElementById('awaySetScore');
+  if(homeBadge)homeBadge.textContent=setterBadgeText('home');
+  if(awayBadge)awayBadge.textContent=setterBadgeText('away');
+}
+function getScore(){return S.homeScore+'-'+S.awayScore}
+
+// QUICK ACTIONS
+function addPoint(side){
+  const phaseMeta=buildPointPhaseMeta(side);
+  const autoRotation=bumpScore(side);
+  const teamName=side==='home'?document.getElementById('homeName').textContent:document.getElementById('awayName').textContent;
+  addActionRecord({code:side==='home'?'+H':'+A',text:teamName+' quick point',evalSym:'+',teamSide:side,skill:'Point',playerNum:'',evaluation:'Point'},true,autoRotation,phaseMeta);
+  renderPBP();
+  showToast('+1 '+teamName)
+}
+
+function restoreAutoRotation(meta){
+  if(!meta)return;
+  if(meta.side==='home'){
+    S.homeRot=[...meta.beforeRot];
+    S.homeRotation=meta.beforeRotationNumber;
+  }else{
+    S.awayRot=[...meta.beforeRot];
+    S.awayRotation=meta.beforeRotationNumber;
+  }
+  renderCourt();
+  renderRotationStatus();
+}
+
+function undoLast(){
+  if(!S.actions.length)return;
+  const last=S.actions.shift();
+  if(last.pointAction){
+    if(last.teamSide==='home'&&S.homeScore>0){S.homeScore--;document.getElementById('homeScore').textContent=S.homeScore}
+    else if(last.teamSide==='away'&&S.awayScore>0){S.awayScore--;document.getElementById('awayScore').textContent=S.awayScore}
+    restoreAutoRotation(last.autoRotation);
+  }else if(last.manualRotation){
+    // Manual rotation undo is not automatic yet; use opposite manual rotation if needed.
+  }
+  renderCourt();
+  renderRotationStatus();
+  renderPBP();
+  showToast('↩ Undone: '+last.code)
+}
+function clickPlayer(side,num){
+  const prefix=side==='home'?'H-':'A-';
+  const field=document.getElementById('codeField');
+  field.value=prefix+num;
+  field.focus();
+}
+
+// ROTATION
+// Rotation arrays are stored in position order: [P1, P2, P3, P4, P5, P6].
+// Volleyball clockwise rotation: P1→P6, P6→P5, P5→P4, P4→P3, P3→P2, P2→P1.
+// Array result after one rotation: [P2, P3, P4, P5, P6, P1].
+const POS_IDS=['p1','p2','p3','p4','p5','p6'];
+
+function renderCourtSide(side){
+  const rot=side==='home'?S.homeRot:S.awayRot;
+  const prefix=side==='home'?'h':'a';
+  POS_IDS.forEach((pos,i)=>{
+    const num=rot[i];
+    const numEl=document.getElementById(prefix+'-'+pos);
+    if(!numEl)return;
+    numEl.textContent='#'+num;
+    const spot=numEl.closest('.player-spot');
+    if(spot)spot.onclick=()=>clickPlayer(side,num);
+  });
+}
+
+function renderCourt(){
+  renderCourtSide('home');
+  renderCourtSide('away');
+}
+
+function rotate(side,opts={}){
+  const rot=side==='home'?S.homeRot:S.awayRot;
+  const beforeRot=[...rot];
+  const beforeRotationNumber=side==='home'?S.homeRotation:S.awayRotation;
+
+  const first=rot.shift();
+  rot.push(first);
+
+  if(side==='home')S.homeRotation=S.homeRotation===6?1:S.homeRotation+1;
+  else S.awayRotation=S.awayRotation===6?1:S.awayRotation+1;
+
+  renderCourt();
+  renderRotationStatus();
+
+  const teamName=side==='home'?document.getElementById('homeName').textContent:document.getElementById('awayName').textContent;
+  const rotationNumber=side==='home'?S.homeRotation:S.awayRotation;
+
+  if(!opts.silent){
+    S.actions.unshift({
+      score:getScore(),
+      code:(side==='home'?'H':'A')+'-ROT'+rotationNumber,
+      text:teamName+' manually rotated to Rotation '+rotationNumber,
+      evalSym:'=',
+      teamSide:side,
+      set:S.currentSet,
+      skill:'Rotation',
+      playerNum:'',
+      evaluation:'Rotation '+rotationNumber,
+      pointAction:false,
+      rotation:rotationNumber,
+      manualRotation:true
+    });
+    renderPBP();
+    showToast('↻ '+teamName+' rotated to Rotation '+rotationNumber);
+  }
+
+  return {side,beforeRot,beforeRotationNumber,afterRot:[...rot],afterRotationNumber:rotationNumber};
+}
+
+// SET
+function endSet(){
+  if(S.homeScore>S.awayScore)S.homeSetWins++;
+  else if(S.awayScore>S.homeScore)S.awaySetWins++;
+  S.currentSet++;S.homeScore=0;S.awayScore=0;
+  document.getElementById('homeScore').textContent=0;
+  document.getElementById('awayScore').textContent=0;
+  document.getElementById('setLabel').textContent='SET '+S.currentSet;
+  // Top blue badges show live rotation + setter position, not set wins.
+  updateRotationBadges();
+  renderRotationStatus();
+  showToast('📋 Set ended')
+}
+
+// RENDER PBP
+function renderPBP(){
+  const el=document.getElementById('pbpList');
+  if(!S.actions.length){el.innerHTML='<div style="padding:14px;color:var(--gray);font-size:12px;font-style:italic">No actions yet.</div>';return}
+  el.innerHTML=S.actions.map(a=>{
+    const cls=a.evalSym==='+'?'pos':a.evalSym==='-'?'neg':'neu';
+    const pointMark=a.pointAction?' 🏐':'';
+    const winnerMark=(a.pointAction && a.pointWinnerSide && a.pointWinnerSide!==a.teamSide)?` · Point ${(a.pointWinnerSide==='home'?S.teams.home.short:S.teams.away.short)}`:'';
+    const phaseMark=a.pointAction?(a.sideOutWon?' · Side-out':(a.breakPointWon?' · Break point':'')):'';
+    return`<div class="pbp-item"><span class="pbp-score">${a.score}</span><span class="pbp-code ${cls}">${a.code}</span><div><div class="pbp-text">${a.text}${pointMark}${winnerMark}${phaseMark}</div></div></div>`
+  }).join('')
+}
+
+// ══════════════════════════════════════════
+// ANALYTICS PAGE
+// ══════════════════════════════════════════
+function showAnalytics(){
+  document.getElementById('matchPage').classList.remove('active');
+  document.getElementById('analyticsPage').classList.add('active');
+  renderAnalytics()
+}
+function backToMatch(){
+  document.getElementById('analyticsPage').classList.remove('active');
+  document.getElementById('matchPage').classList.add('active')
+}
+
+function getFilteredActions(){
+  const team=document.getElementById('filterTeam')?.value || 'all';
+  const player=document.getElementById('filterPlayer')?.value || 'all';
+  const rotation=document.getElementById('filterRotation')?.value || 'all';
+  const skill=document.getElementById('filterSkill')?.value || 'all';
+
+  return S.actions.filter(a=>{
+    if(team!=='all' && a.teamSide!==team)return false;
+    if(player!=='all'){
+      const [pTeam,pNum]=player.split('-');
+      if(a.teamSide!==pTeam || String(a.playerNum)!==String(pNum))return false;
+    }
+    if(rotation!=='all'){
+      // Rotation filter now uses the real P1–P6 rotation at the moment of the action.
+      const actionRotation = a.rotationBefore || a.rotation;
+      if(String(actionRotation)!==String(rotation))return false;
+    }
+    if(skill!=='all'){
+      const map={S:'Serve',A:'Attack',R:'Reception',B:'Block',D:'Dig'};
+      if((a.skill||'') !== map[skill])return false;
+    }
+    return true;
+  });
+}
+
+function getSelectedFilters(){
+  return {
+    team:document.getElementById('filterTeam')?.value || 'all',
+    player:document.getElementById('filterPlayer')?.value || 'all',
+    rotation:document.getElementById('filterRotation')?.value || 'all',
+    skill:document.getElementById('filterSkill')?.value || 'all'
+  };
+}
+
+function getSelectedPlayerInfo(){
+  const player=document.getElementById('filterPlayer')?.value || 'all';
+  if(player==='all')return null;
+  const [side,num]=player.split('-');
+  if(!side||!num)return null;
+  return {side,num};
+}
+
+function actionMatchesTeamRotationSkill(a,{team='all',rotation='all',skill='all'}={}){
+  if(team!=='all' && a.teamSide!==team)return false;
+  if(rotation!=='all'){
+    const actionRotation = a.rotationBefore || a.rotation;
+    if(String(actionRotation)!==String(rotation))return false;
+  }
+  if(skill!=='all'){
+    const map={S:'Serve',A:'Attack',R:'Reception',B:'Block',D:'Dig'};
+    if((a.skill||'') !== map[skill])return false;
+  }
+  return true;
+}
+
+function getPlayerSkillActions(){
+  const f=getSelectedFilters();
+  return S.actions.filter(a=>{
+    if(!actionMatchesTeamRotationSkill(a,f))return false;
+    if(f.player!=='all'){
+      const [pTeam,pNum]=f.player.split('-');
+      if(a.teamSide!==pTeam || String(a.playerNum)!==String(pNum))return false;
+    }
+    return true;
+  });
+}
+
+function getTeamRallyActionsForCards(){
+  const f=getSelectedFilters();
+  const selectedPlayer=getSelectedPlayerInfo();
+
+  // Pro logic: when one player is selected, team/rally KPIs are NOT calculated only from that player's touches.
+  // They are calculated from the player's TEAM, with rotation filter still respected.
+  // Skill filter is intentionally ignored for Side-Out / Break Point because those are rally/phase KPIs.
+  const rallyTeam = selectedPlayer ? selectedPlayer.side : f.team;
+  return S.actions.filter(a=>actionMatchesTeamRotationSkill(a,{team:rallyTeam,rotation:f.rotation,skill:'all'}));
+}
+
+function getPlayerName(side,num){
+  const p=getPlayerByNumber(side,num);
+  return (p && p.name) ? p.name : ('Player '+num);
+}
+
+function populatePlayerFilter(){
+  const playerSelect=document.getElementById('filterPlayer');
+  if(!playerSelect)return;
+  const current=playerSelect.value || 'all';
+  const teamFilter=document.getElementById('filterTeam')?.value || 'all';
+
+  const seen=new Set();
+  const list=[];
+  S.actions.forEach(a=>{
+    if(!a.playerNum)return;
+    if(teamFilter!=='all' && a.teamSide!==teamFilter)return;
+    const key=a.teamSide+'-'+a.playerNum;
+    if(seen.has(key))return;
+    seen.add(key);
+    list.push({key,side:a.teamSide,num:a.playerNum,name:getPlayerName(a.teamSide,a.playerNum)});
+  });
+
+  list.sort((a,b)=>a.side.localeCompare(b.side)||Number(a.num)-Number(b.num));
+  playerSelect.innerHTML='<option value="all">All Players</option>';
+  list.forEach(p=>{
+    const opt=document.createElement('option');
+    opt.value=p.key;
+    opt.textContent=(p.side==='home'?S.teams.home.short:S.teams.away.short)+' #'+p.num+' '+p.name;
+    playerSelect.appendChild(opt);
+  });
+  if([...playerSelect.options].some(o=>o.value===current))playerSelect.value=current;
+  else playerSelect.value='all';
+}
+
+function calcSideOutBreakStats(actions, team='all'){
+  const pointActions=actions.filter(a=>a.pointAction);
+  const sides=['home','away'];
+  const out={};
+  sides.forEach(side=>{
+    const so=pointActions.filter(a=>a.sideOutTeam===side);
+    const bp=pointActions.filter(a=>a.breakPointTeam===side);
+    out[side]={
+      sideOutWon:so.filter(a=>a.sideOutWon).length,
+      sideOutTotal:so.length,
+      breakWon:bp.filter(a=>a.breakPointWon).length,
+      breakTotal:bp.length
+    };
+  });
+  const selected=team==='home'||team==='away' ? [team] : sides;
+  const total=selected.reduce((acc,side)=>{
+    acc.sideOutWon+=out[side].sideOutWon;
+    acc.sideOutTotal+=out[side].sideOutTotal;
+    acc.breakWon+=out[side].breakWon;
+    acc.breakTotal+=out[side].breakTotal;
+    return acc;
+  },{sideOutWon:0,sideOutTotal:0,breakWon:0,breakTotal:0});
+  total.sideOutPct=total.sideOutTotal?total.sideOutWon/total.sideOutTotal*100:0;
+  total.breakPct=total.breakTotal?total.breakWon/total.breakTotal*100:0;
+  total.byTeam=out;
+  return total;
+}
+
+function calcRotationPerformance(actions, team='all'){
+  const sides=team==='home'||team==='away' ? [team] : ['home','away'];
+  const data={home:{},away:{}};
+
+  ['home','away'].forEach(side=>{
+    for(let r=1;r<=6;r++){
+      data[side][r]={
+        side,
+        rotation:r,
+        sideOutWon:0,
+        sideOutTotal:0,
+        breakWon:0,
+        breakTotal:0,
+        pointsWon:0,
+        pointsLost:0,
+        attackK:0,
+        attackE:0,
+        serveAce:0,
+        serveE:0,
+        recPerfect:0,
+        recPositive:0,
+        recNegative:0,
+        recError:0
+      };
+    }
+  });
+
+  actions.forEach(a=>{
+    const skill=a.skill||'';
+    const ev=String(a.evaluation||'').toLowerCase();
+
+    // Skill actions belong to the player's team rotation at the time of the action.
+    if(a.teamSide && (team==='all' || a.teamSide===team)){
+      const r=Number(a.rotationBefore || a.rotation || 1);
+      const row=data[a.teamSide]?.[r];
+      if(row){
+        if(skill==='Attack'){
+          if(a.evalSym==='+')row.attackK++;
+          if(a.evalSym==='-')row.attackE++;
+        }
+        if(skill==='Serve'){
+          if(a.evalSym==='+')row.serveAce++;
+          if(a.evalSym==='-')row.serveE++;
+        }
+        if(skill==='Reception'){
+          if(a.evalSym==='#' || ev==='perfect')row.recPerfect++;
+          else if(a.evalSym==='+' || ev==='positive')row.recPositive++;
+          else if(a.evalSym==='-' || ev==='negative')row.recNegative++;
+          else if(a.evalSym==='!' || ev==='error')row.recError++;
+        }
+      }
+    }
+
+    // Point actions define rotation performance for both teams.
+    if(a.pointAction){
+      const homeR=Number(a.homeRotationBefore || 1);
+      const awayR=Number(a.awayRotationBefore || 1);
+
+      const winnerSide=a.pointWinnerSide || a.teamSide;
+      if(data.home[homeR]){
+        if(winnerSide==='home')data.home[homeR].pointsWon++;
+        else data.home[homeR].pointsLost++;
+      }
+      if(data.away[awayR]){
+        if(winnerSide==='away')data.away[awayR].pointsWon++;
+        else data.away[awayR].pointsLost++;
+      }
+
+      if(a.sideOutTeam){
+        const r=Number(a.sideOutTeam==='home' ? (a.homeRotationBefore || a.receivingRotationBefore || 1) : (a.awayRotationBefore || a.receivingRotationBefore || 1));
+        const row=data[a.sideOutTeam]?.[r];
+        if(row){
+          row.sideOutTotal++;
+          if(a.sideOutWon)row.sideOutWon++;
+        }
+      }
+
+      if(a.breakPointTeam){
+        const r=Number(a.breakPointTeam==='home' ? (a.homeRotationBefore || a.servingRotationBefore || 1) : (a.awayRotationBefore || a.servingRotationBefore || 1));
+        const row=data[a.breakPointTeam]?.[r];
+        if(row){
+          row.breakTotal++;
+          if(a.breakPointWon)row.breakWon++;
+        }
+      }
+    }
+  });
+
+  return sides.flatMap(side=>Object.values(data[side]));
+}
+
+function renderRotationPerformanceTable(actions){
+  const selectedPlayer=getSelectedPlayerInfo();
+  const team=selectedPlayer ? selectedPlayer.side : (document.getElementById('filterTeam')?.value || 'all');
+  const selectedRotation=document.getElementById('filterRotation')?.value || 'all';
+
+  // Build rotation performance from the same filtered actions used by the cards/table.
+  // Then apply the visible Rotation dropdown to this table too.
+  let rows=calcRotationPerformance(actions,team);
+  if(selectedRotation!=='all'){
+    rows=rows.filter(r=>String(r.rotation)===String(selectedRotation));
+  }
+
+  const el=document.getElementById('rotationStatsTable');
+  if(!el)return;
+
+  let html=`<thead><tr>
+    <th>Team</th><th class="center">Rotation</th>
+    <th class="center">Side-Out</th><th class="center">SO%</th>
+    <th class="center">Break Point</th><th class="center">BP%</th>
+    <th class="center">Pts W-L</th>
+    <th class="center">Att K/E</th>
+    <th class="center">Srv Ace/E</th>
+    <th class="center">Rec #/+/-/E</th>
+  </tr></thead><tbody>`;
+
+  if(!rows.length){
+    html+=`<tr><td colspan="10" class="center" style="color:var(--gray);font-style:italic">No rotation data for this filter.</td></tr>`;
+  }
+
+  rows.forEach(r=>{
+    const teamShort=r.side==='home'?S.teams.home.short:S.teams.away.short;
+    const soPct=r.sideOutTotal?r.sideOutWon/r.sideOutTotal*100:0;
+    const bpPct=r.breakTotal?r.breakWon/r.breakTotal*100:0;
+    html+=`<tr>
+      <td>${teamShort}</td>
+      <td class="center"><strong>P${r.rotation}</strong></td>
+      <td class="center">${r.sideOutWon}/${r.sideOutTotal}</td>
+      <td class="center"><span class="eff-badge ${soPct>=60?'eff-high':soPct>=40?'eff-mid':'eff-low'}">${soPct.toFixed(0)}%</span></td>
+      <td class="center">${r.breakWon}/${r.breakTotal}</td>
+      <td class="center"><span class="eff-badge ${bpPct>=40?'eff-high':bpPct>=20?'eff-mid':'eff-low'}">${bpPct.toFixed(0)}%</span></td>
+      <td class="center">${r.pointsWon}-${r.pointsLost}</td>
+      <td class="center">${r.attackK}/${r.attackE}</td>
+      <td class="center">${r.serveAce}/${r.serveE}</td>
+      <td class="center">${r.recPerfect}/${r.recPositive}/${r.recNegative}/${r.recError}</td>
+    </tr>`;
+  });
+
+  html+='</tbody>';
+  el.innerHTML=html;
+}
+
+function renderAnalytics(){
+  populatePlayerFilter();
+
+  // Split analytics into 2 layers:
+  // 1) playerActions = individual/skill stats, affected by Player filter.
+  // 2) rallyActions = team phase stats, NOT reduced to only selected player's touches.
+  const actions=getPlayerSkillActions();
+  const rallyActions=getTeamRallyActionsForCards();
+  const selectedPlayer=getSelectedPlayerInfo();
+  const teamForPhase=selectedPlayer ? selectedPlayer.side : (document.getElementById('filterTeam')?.value || 'all');
+
+  const phaseStats=calcSideOutBreakStats(rallyActions, teamForPhase);
+  renderRotationPerformanceTable(rallyActions);
+
+  const players={};
+  actions.forEach(a=>{
+    if(!a.playerNum)return;
+    const key=(a.teamSide||'home')+'-'+a.playerNum;
+    if(!players[key])players[key]={team:a.teamSide,num:a.playerNum,name:getPlayerName(a.teamSide,a.playerNum),attack:{k:0,e:0,tot:0},reception:{pos:0,tot:0,perfect:0,positive:0,negative:0,error:0,neutral:0},serve:{ace:0,e:0,tot:0},block:{pt:0,e:0},dig:{ok:0,e:0,tot:0},pts:0};
+    const p=players[key];
+    const skill=a.skill||'';
+    const ev=String(a.evaluation||'').toLowerCase();
+
+    if(skill==='Serve'){
+      p.serve.tot++;
+      if(a.evalSym==='+')p.serve.ace++;
+      if(a.evalSym==='-')p.serve.e++;
+    }else if(skill==='Attack'){
+      p.attack.tot++;
+      if(a.evalSym==='+')p.attack.k++;
+      if(a.evalSym==='-')p.attack.e++;
+    }else if(skill==='Reception'){
+      p.reception.tot++;
+      if(a.evalSym==='#' || ev==='perfect'){
+        p.reception.perfect++;
+        p.reception.pos++;
+      }else if(a.evalSym==='+' || ev==='positive'){
+        p.reception.positive++;
+        p.reception.pos++;
+      }else if(ev==='negative' || ev==='bad' || ev==='poor'){
+        p.reception.negative++;
+      }else if(a.evalSym==='!' || ev==='error' || ev==='mistake' || ev==='failed' || ev==='miss' || ev==='out' || ev==='fault'){
+        p.reception.error++;
+      }else{
+        p.reception.neutral++;
+      }
+    }else if(skill==='Block'){
+      if(a.evalSym==='+')p.block.pt++;
+      if(a.evalSym==='-')p.block.e++;
+    }else if(skill==='Dig'){
+      p.dig.tot++;
+      if(a.evalSym==='+'||a.evalSym==='=')p.dig.ok++;
+      if(a.evalSym==='-')p.dig.e++;
+    }
+    if(a.pointAction && (a.pointWinnerSide || a.teamSide)===a.teamSide)p.pts++;
+  });
+
+  let attackK=0,attackE=0,attackTot=0,recPos=0,recTot=0,recPerfect=0,recPositive=0,recNegative=0,recError=0,recNeutral=0,serveAce=0,serveE=0,serveTot=0,totalPts=0,totalErrors=0,blockPts=0,digOK=0,digE=0,digTot=0;
+  Object.values(players).forEach(p=>{
+    attackK+=p.attack.k; attackE+=p.attack.e; attackTot+=p.attack.tot;
+    recPos+=p.reception.pos; recTot+=p.reception.tot; recPerfect+=p.reception.perfect; recPositive+=p.reception.positive; recNegative+=p.reception.negative; recError+=p.reception.error; recNeutral+=p.reception.neutral;
+    serveAce+=p.serve.ace; serveE+=p.serve.e; serveTot+=p.serve.tot;
+    blockPts+=p.block.pt; totalPts+=p.pts;
+    digOK+=p.dig.ok; digE+=p.dig.e; digTot+=p.dig.tot;
+    totalErrors+=(p.attack.e+p.serve.e+p.block.e+p.dig.e+p.reception.error);
+  });
+
+  const attackEff=attackTot?(attackK-attackE)/attackTot*100:0;
+  const recPosP=recTot?recPos/recTot*100:0;
+  const serveEff=serveTot?serveAce/serveTot*100:0;
+  const recPerfP=recTot?recPerfect/recTot*100:0;
+  const digEff=digTot?digOK/digTot*100:0;
+
+  const phaseContext = selectedPlayer ? `Team impact for #${selectedPlayer.num}` : 'Team/rally KPI';
+
+  document.getElementById('statsCards').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Side-Out %</div><div class="stat-value green">${phaseStats.sideOutPct.toFixed(1)}%</div><div class="stat-detail">${phaseStats.sideOutWon} won / ${phaseStats.sideOutTotal} receptions · ${phaseContext}</div></div>
+    <div class="stat-card"><div class="stat-label">Break Point %</div><div class="stat-value orange">${phaseStats.breakPct.toFixed(1)}%</div><div class="stat-detail">${phaseStats.breakWon} won / ${phaseStats.breakTotal} serves · ${phaseContext}</div></div>
+    <div class="stat-card"><div class="stat-label">Attack Efficiency</div><div class="stat-value blue">${attackEff.toFixed(1)}%</div><div class="stat-detail">${attackK}K / ${attackE}E / ${attackTot} Total</div></div>
+    <div class="stat-card"><div class="stat-label">Reception Positive %</div><div class="stat-value orange">${recPosP.toFixed(1)}%</div><div class="stat-detail">#${recPerfect} +${recPositive} -${recNegative} E${recError} / ${recTot}</div></div>
+    <div class="stat-card"><div class="stat-label">Serve Effectiveness</div><div class="stat-value green">${serveEff.toFixed(1)}%</div><div class="stat-detail">${serveAce} Aces / ${serveE} Errors</div></div>
+    <div class="stat-card"><div class="stat-label">Total Points Scored</div><div class="stat-value blue">${totalPts}</div><div class="stat-detail">Kills ${attackK} + Aces ${serveAce} + Blocks ${blockPts}</div></div>
+    <div class="stat-card"><div class="stat-label">Reception Full</div><div class="stat-value green">${recPerfP.toFixed(1)}%</div><div class="stat-detail">Perfect ${recPerfect} · Positive ${recPositive} · Negative ${recNegative} · Error ${recError}</div></div>
+    <div class="stat-card"><div class="stat-label">Total Errors</div><div class="stat-value red">${totalErrors}</div><div class="stat-detail">Att ${attackE} / Rec ${recError} / Dig ${digE} / Srv ${serveE}</div></div>`;
+
+  let tableHTML=`<thead><tr>
+    <th>#</th><th>Player</th><th colspan="4" class="center">ATTACK</th><th colspan="7" class="center">RECEPTION</th><th colspan="3" class="center">SERVE</th><th colspan="2" class="center">BLOCK</th><th colspan="3" class="center">DIG</th><th class="center">PTS</th>
+  </tr><tr><th></th><th></th><th class="center">K</th><th class="center">E</th><th class="center">TOT</th><th class="center">EFF%</th><th class="center">#</th><th class="center">+</th><th class="center">-</th><th class="center">ERR</th><th class="center">NEU</th><th class="center">TOT</th><th class="center">POS%</th><th class="center">ACE</th><th class="center">E</th><th class="center">TOT</th><th class="center">PT</th><th class="center">E</th><th class="center">OK</th><th class="center">E</th><th class="center">TOT</th><th class="center"></th></tr></thead><tbody>`;
+
+  const rows=Object.values(players).sort((a,b)=>b.pts-a.pts || Number(a.num)-Number(b.num));
+  const totals={attack:{k:0,e:0,tot:0},reception:{pos:0,tot:0,perfect:0,positive:0,negative:0,error:0,neutral:0},serve:{ace:0,e:0,tot:0},block:{pt:0,e:0},dig:{ok:0,e:0,tot:0},pts:0};
+
+  rows.forEach((p,idx)=>{
+    const teamName=p.team==='home'?S.teams.home.short:S.teams.away.short;
+    const aEff=p.attack.tot?(p.attack.k-p.attack.e)/p.attack.tot*100:0;
+    const rP=p.reception.tot?p.reception.pos/p.reception.tot*100:0;
+    tableHTML+=`<tr><td>${idx+1}</td><td>${teamName} #${p.num} ${p.name}</td><td class="center skill-val green">${p.attack.k}</td><td class="center skill-val red">${p.attack.e}</td><td class="center">${p.attack.tot}</td><td class="center"><span class="eff-badge ${aEff>=40?'eff-high':aEff>=20?'eff-mid':'eff-low'}">${aEff.toFixed(0)}%</span></td><td class="center">${p.reception.perfect}</td><td class="center skill-val green">${p.reception.positive}</td><td class="center skill-val red">${p.reception.negative}</td><td class="center skill-val red">${p.reception.error}</td><td class="center">${p.reception.neutral}</td><td class="center">${p.reception.tot}</td><td class="center"><span class="eff-badge ${rP>=70?'eff-high':rP>=40?'eff-mid':'eff-low'}">${rP.toFixed(0)}%</span></td><td class="center skill-val green">${p.serve.ace}</td><td class="center skill-val red">${p.serve.e}</td><td class="center">${p.serve.tot}</td><td class="center skill-val green">${p.block.pt}</td><td class="center skill-val red">${p.block.e}</td><td class="center skill-val green">${p.dig.ok}</td><td class="center skill-val red">${p.dig.e}</td><td class="center">${p.dig.tot}</td><td class="center"><span class="pts-num">${p.pts}</span></td></tr>`;
+    totals.attack.k+=p.attack.k; totals.attack.e+=p.attack.e; totals.attack.tot+=p.attack.tot;
+    totals.reception.pos+=p.reception.pos; totals.reception.tot+=p.reception.tot; totals.reception.perfect+=p.reception.perfect; totals.reception.positive+=p.reception.positive; totals.reception.negative+=p.reception.negative; totals.reception.error+=p.reception.error; totals.reception.neutral+=p.reception.neutral;
+    totals.serve.ace+=p.serve.ace; totals.serve.e+=p.serve.e; totals.serve.tot+=p.serve.tot;
+    totals.block.pt+=p.block.pt; totals.block.e+=p.block.e; totals.dig.ok+=p.dig.ok; totals.dig.e+=p.dig.e; totals.dig.tot+=p.dig.tot; totals.pts+=p.pts;
+  });
+
+  const tAeff=totals.attack.tot?(totals.attack.k-totals.attack.e)/totals.attack.tot*100:0;
+  const tRp=totals.reception.tot?totals.reception.pos/totals.reception.tot*100:0;
+  tableHTML+=`<tr><td colspan="2">TOTALS</td><td class="center skill-val green">${totals.attack.k}</td><td class="center skill-val red">${totals.attack.e}</td><td class="center">${totals.attack.tot}</td><td class="center">${tAeff.toFixed(0)}%</td><td class="center">${totals.reception.perfect}</td><td class="center skill-val green">${totals.reception.positive}</td><td class="center skill-val red">${totals.reception.negative}</td><td class="center skill-val red">${totals.reception.error}</td><td class="center">${totals.reception.neutral}</td><td class="center">${totals.reception.tot}</td><td class="center">${tRp.toFixed(0)}%</td><td class="center skill-val green">${totals.serve.ace}</td><td class="center skill-val red">${totals.serve.e}</td><td class="center">${totals.serve.tot}</td><td class="center skill-val green">${totals.block.pt}</td><td class="center skill-val red">${totals.block.e}</td><td class="center skill-val green">${totals.dig.ok}</td><td class="center skill-val red">${totals.dig.e}</td><td class="center">${totals.dig.tot}</td><td class="center"><span class="pts-num">${totals.pts}</span></td></tr></tbody>`;
+  document.getElementById('playerStatsTable').innerHTML=tableHTML;
+}
+function applyFilters(){
+  // If team changes, rebuild player list and reset invalid player selection.
+  populatePlayerFilter();
+  renderAnalytics();
+}
+
+
+function exportCSV(){
+  const rows=[['Set','Score','Team','Player','Skill','Evaluation','Code','Rotation','Point','SideOut','BreakPoint']];
+  S.actions.slice().reverse().forEach(a=>{
+    rows.push([a.set,a.score,a.teamSide,a.playerNum||'',a.skill||'',a.evaluation||'',a.code||'',a.rotationBefore||a.rotation||'',a.pointAction?'YES':'NO',a.sideOutWon?'YES':'',a.breakPointWon?'YES':'']);
+  });
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='VolleyCode_Pro_match_report.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('📄 CSV exported');
+}
+
+function pct(w,t){return t?Math.round((w/t)*100):0}
+function safe(v){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function reportTeamName(side){return side==='home'?S.teams.home.name:S.teams.away.name}
+function reportTeamShort(side){return side==='home'?S.teams.home.short:S.teams.away.short}
+
+function getReportPlayerRows(side){
+  const players={};
+  getTeamPlayers(side).forEach(pl=>{
+    if(!pl.num)return;
+    players[String(pl.num)]={side,num:String(pl.num),name:pl.name||('Player '+pl.num),role:pl.position||'',pts:0,serve:{tot:0,ace:0,err:0},rec:{tot:0,perf:0,pos:0,neg:0,err:0},att:{tot:0,k:0,err:0},blk:{pt:0,err:0},sets:new Set()};
+  });
+  S.actions.forEach(a=>{
+    if(a.teamSide!==side||!a.playerNum)return;
+    const n=String(a.playerNum);
+    if(!players[n])players[n]={side,num:n,name:getPlayerName(side,n),role:'',pts:0,serve:{tot:0,ace:0,err:0},rec:{tot:0,perf:0,pos:0,neg:0,err:0},att:{tot:0,k:0,err:0},blk:{pt:0,err:0},sets:new Set()};
+    const p=players[n], skill=a.skill||'', ev=String(a.evaluation||'').toLowerCase();
+    p.sets.add(a.set||1);
+    if(a.pointAction && (a.pointWinnerSide || a.teamSide)===a.teamSide)p.pts++;
+    if(skill==='Serve'){p.serve.tot++; if(a.evalSym==='+')p.serve.ace++; if(a.evalSym==='-')p.serve.err++;}
+    if(skill==='Reception'){
+      p.rec.tot++;
+      if(a.evalSym==='#'||ev==='perfect')p.rec.perf++;
+      else if(a.evalSym==='+'||ev==='positive')p.rec.pos++;
+      else if(a.evalSym==='-'||ev==='negative')p.rec.neg++;
+      else if(a.evalSym==='!'||ev==='error')p.rec.err++;
+    }
+    if(skill==='Attack'){p.att.tot++; if(a.evalSym==='+')p.att.k++; if(a.evalSym==='-')p.att.err++;}
+    if(skill==='Block'){if(a.evalSym==='+')p.blk.pt++; if(a.evalSym==='-')p.blk.err++;}
+  });
+  return Object.values(players).sort((a,b)=>Number(a.num)-Number(b.num));
+}
+
+function getReportTotals(side){
+  const rows=getReportPlayerRows(side);
+  return rows.reduce((t,p)=>{
+    t.pts+=p.pts;t.sTot+=p.serve.tot;t.sAce+=p.serve.ace;t.sErr+=p.serve.err;
+    t.rTot+=p.rec.tot;t.rPerf+=p.rec.perf;t.rPos+=p.rec.pos;t.rNeg+=p.rec.neg;t.rErr+=p.rec.err;
+    t.aTot+=p.att.tot;t.aK+=p.att.k;t.aErr+=p.att.err;t.bPt+=p.blk.pt;t.bErr+=p.blk.err;
+    return t;
+  },{pts:0,sTot:0,sAce:0,sErr:0,rTot:0,rPerf:0,rPos:0,rNeg:0,rErr:0,aTot:0,aK:0,aErr:0,bPt:0,bErr:0});
+}
+
+function buildTeamReportTable(side){
+  const rows=getReportPlayerRows(side);
+  const totals=getReportTotals(side);
+  const tr=rows.map(p=>{
+    const attEff=p.att.tot?Math.round((p.att.k-p.att.err)/p.att.tot*100):0;
+    const recPos=p.rec.tot?Math.round((p.rec.perf+p.rec.pos)/p.rec.tot*100):0;
+    const setBoxes=[1,2,3,4,5].map(i=>`<span class="setbox">${p.sets.has(i)?i:''}</span>`).join('');
+    return `<tr><td>${safe(p.num)}</td><td>${safe(p.name)}</td><td>${safe(p.role)}</td><td>${setBoxes}</td><td>${p.pts}</td><td>${p.serve.tot}</td><td>${p.serve.ace}</td><td>${p.serve.err}</td><td>${p.rec.tot}</td><td>${p.rec.err}</td><td>${recPos}%</td><td>${p.att.tot}</td><td>${p.att.k}</td><td>${p.att.err}</td><td>${attEff}%</td><td>${p.blk.pt}</td></tr>`;
+  }).join('');
+  const tAttEff=totals.aTot?Math.round((totals.aK-totals.aErr)/totals.aTot*100):0;
+  const tRec=totals.rTot?Math.round((totals.rPerf+totals.rPos)/totals.rTot*100):0;
+  return `<div class="team-block"><div class="team-title">${safe(reportTeamName(side))}</div><table class="report-table team-table"><thead><tr><th>#</th><th>Player</th><th>Role</th><th>Set</th><th>Pts</th><th colspan="3">Serve</th><th colspan="3">Reception</th><th colspan="4">Attack</th><th>BK</th></tr><tr><th></th><th></th><th></th><th>1 2 3 4 5</th><th>Tot</th><th>Tot</th><th>Ace</th><th>Err</th><th>Tot</th><th>Err</th><th>Pos%</th><th>Tot</th><th>Pt</th><th>Err</th><th>Eff%</th><th>Pts</th></tr></thead><tbody>${tr}<tr class="totals"><td colspan="4">Team totals</td><td>${totals.pts}</td><td>${totals.sTot}</td><td>${totals.sAce}</td><td>${totals.sErr}</td><td>${totals.rTot}</td><td>${totals.rErr}</td><td>${tRec}%</td><td>${totals.aTot}</td><td>${totals.aK}</td><td>${totals.aErr}</td><td>${tAttEff}%</td><td>${totals.bPt}</td></tr></tbody></table></div>`;
+}
+
+function buildScoreTable(){
+  const pointActions=S.actions.filter(a=>a.pointAction).slice().reverse();
+  let home=0,away=0,rows=[];
+  pointActions.forEach((a,i)=>{
+    const winnerSide=a.pointWinnerSide || a.teamSide;
+    if(winnerSide==='home')home++; else away++;
+    rows.push(`<tr><td>${a.set||1}</td><td>${i+1}</td><td>${safe(a.score)}</td><td>${home}-${away}</td></tr>`);
+  });
+  if(!rows.length) rows.push('<tr><td colspan="4">No points yet</td></tr>');
+  return `<table class="report-table"><thead><tr><th>Set</th><th>#</th><th>Before</th><th>Running</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+}
+
+function buildRotationReport(){
+  const rows=calcRotationPerformance(S.actions,'all').map(r=>{
+    const so=pct(r.sideOutWon,r.sideOutTotal), bp=pct(r.breakWon,r.breakTotal);
+    return `<tr><td>${safe(reportTeamShort(r.side))}</td><td>P${r.rotation}</td><td>${r.sideOutWon}/${r.sideOutTotal}</td><td>${so}%</td><td>${r.breakWon}/${r.breakTotal}</td><td>${bp}%</td><td>${r.pointsWon}-${r.pointsLost}</td></tr>`;
+  }).join('');
+  return `<table class="report-table"><thead><tr><th>Team</th><th>Rot</th><th>SO</th><th>SO%</th><th>BP</th><th>BP%</th><th>W-L</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function buildBottomPhaseReport(){
+  const h=getReportTotals('home'), a=getReportTotals('away');
+  const hs=calcSideOutBreakStats(S.actions,'home'), as=calcSideOutBreakStats(S.actions,'away');
+  return `<div class="bottom-grid">
+    <div><div class="mini-title">${safe(reportTeamName('home'))}</div><table class="report-table"><tr><th>Points</th><td>${h.pts}</td></tr><tr><th>Receptions</th><td>${h.rTot}</td></tr><tr><th>Each 1.7 Rec</th><td>${h.rTot?Math.round(h.pts/(h.rTot||1)*10)/10:0} Point</td></tr><tr><th>Serve</th><td>${h.sTot}</td></tr><tr><th>Each 3.6 Serve</th><td>${h.sTot?Math.round(h.pts/(h.sTot||1)*10)/10:0} Break Point</td></tr></table></div>
+    <div><div class="mini-title">KILL ON RECEPTION</div><table class="report-table"><tr><th>Team</th><th>SO%</th><th>SO</th><th>BP%</th><th>BP</th><th>Attack K/E</th></tr><tr><td>${safe(reportTeamShort('home'))}</td><td>${hs.sideOutPct.toFixed(0)}%</td><td>${hs.sideOutWon}/${hs.sideOutTotal}</td><td>${hs.breakPct.toFixed(0)}%</td><td>${hs.breakWon}/${hs.breakTotal}</td><td>${h.aK}/${h.aErr}</td></tr><tr><td>${safe(reportTeamShort('away'))}</td><td>${as.sideOutPct.toFixed(0)}%</td><td>${as.sideOutWon}/${as.sideOutTotal}</td><td>${as.breakPct.toFixed(0)}%</td><td>${as.breakWon}/${as.breakTotal}</td><td>${a.aK}/${a.aErr}</td></tr></table><div class="mini-title">ATTACK ON DIG / TRANSITION</div>${buildRotationReport()}</div>
+    <div><div class="mini-title">${safe(reportTeamName('away'))}</div><table class="report-table"><tr><th>Points</th><td>${a.pts}</td></tr><tr><th>Receptions</th><td>${a.rTot}</td></tr><tr><th>Each 1.7 Rec</th><td>${a.rTot?Math.round(a.pts/(a.rTot||1)*10)/10:0} Point</td></tr><tr><th>Serve</th><td>${a.sTot}</td></tr><tr><th>Each 3.6 Serve</th><td>${a.sTot?Math.round(a.pts/(a.sTot||1)*10)/10:0} Break Point</td></tr></table></div>
+  </div>`;
+}
+
+function exportPDF(){
+  const phaseAll=calcSideOutBreakStats(S.actions,'all');
+  const homeTotals=getReportTotals('home');
+  const awayTotals=getReportTotals('away');
+  const html=`<!doctype html><html><head><title>VolleyCode Pro Match Report</title><style>
+    @page{size:A4;margin:8mm}body{font-family:Arial,Helvetica,sans-serif;color:#111;background:white;font-size:9px}.report{max-width:1120px;margin:0 auto}.top{display:grid;grid-template-columns:1.2fr 1fr 1.1fr;gap:8px;align-items:start}.title{font-size:16px;font-weight:700;border-bottom:1px solid #333;padding-bottom:4px;margin-bottom:5px}.scorebox{font-size:16px;font-weight:700}.scorebox table{width:100%;font-size:16px}.meta{display:grid;grid-template-columns:70px 1fr 80px 1fr;gap:2px 8px}.meta b{font-weight:700}.report-table{border-collapse:collapse;width:100%;margin:4px 0}.report-table th,.report-table td{border:1px solid #555;padding:2px 4px;text-align:center;vertical-align:middle}.report-table th{background:#e5e5e5;font-weight:700}.team-title,.mini-title{font-weight:700;font-size:12px;border-bottom:1px solid #333;margin-top:6px;padding:2px 0}.team-table td:nth-child(2),.team-table th:nth-child(2){text-align:left}.setbox{display:inline-block;width:10px;height:10px;border:1px solid #555;margin:0 1px;font-size:7px;line-height:9px;text-align:center}.totals{font-weight:700;background:#eee}.bottom-grid{display:grid;grid-template-columns:1fr 2.2fr 1fr;gap:8px;margin-top:8px}.legend{border:1px solid #333;padding:6px;font-size:9px;margin-top:6px}.footer{font-size:8px;margin-top:6px;display:flex;justify-content:space-between}.actions{position:fixed;top:8px;right:8px}.actions button{padding:8px 12px;font-weight:700}@media print{.actions{display:none}.report{max-width:none}}
+  </style></head><body><div class="actions"><button onclick="window.print()">Print / Save PDF</button></div><div class="report">
+    <div class="top"><div><div class="title">Match report Match</div><div class="meta"><b>Match</b><span>${S.actions.filter(a=>a.pointAction).length}</span><b>Spectators</b><span></span><b>Date</b><span>${safe(S.matchInfo.date||new Date().toLocaleDateString())}</span><b>Competition</b><span>${safe(S.matchInfo.competition||'')}</span><b>Venue</b><span>${safe(S.matchInfo.venue||'')}</span><b>Hall</b><span></span></div></div><div>${buildScoreTable()}</div><div class="scorebox"><table><tr><td>${safe(reportTeamName('home'))}</td><td>${S.homeSetWins||''}</td><td>${S.homeScore}</td></tr><tr><td>${safe(reportTeamName('away'))}</td><td>${S.awaySetWins||''}</td><td>${S.awayScore}</td></tr></table><div class="legend"><b>BP</b> Break point<br><b>SO</b> Side-out<br><b>Err</b> Error<br><b>Pos%</b> Positive + Perfect reception<br><b>W-L</b> Won - Lost</div></div></div>
+    ${buildTeamReportTable('home')}
+    ${buildTeamReportTable('away')}
+    ${buildBottomPhaseReport()}
+    <div class="footer"><span>VolleyCode Pro report</span><span>Side-Out ${phaseAll.sideOutPct.toFixed(1)}% · Break Point ${phaseAll.breakPct.toFixed(1)}%</span></div>
+  </div></body></html>`;
+  const w=window.open('','_blank');
+  if(!w){showToast('⚠️ Allow popups to create PDF report');return}
+  w.document.open();w.document.write(html);w.document.close();w.focus();
+  showToast('📕 PDF report opened — click Print / Save PDF');
+}
+
+
+// TOAST
+let toastTimeout;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout=setTimeout(()=>t.classList.remove('show'),2400)
+}
+
+// INIT
+initSetupRotationSelectors();
+renderCourt();
+renderRotationStatus();
+renderPBP();
+</script>
+</body>
+</html>
