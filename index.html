@@ -148,9 +148,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .player-spot{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:transform .12s;z-index:5}
 .player-spot:hover{transform:scale(1.1)}
 .player-pos{font-size:10px;font-weight:900;color:#1f2937;letter-spacing:.04em;background:rgba(255,255,255,.8);padding:1px 7px;border-radius:999px}
-.player-num{font-weight:800;font-size:18px;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #111827;box-shadow:0 2px 5px rgba(0,0,0,.18);background:white;color:var(--blue)}
+.player-num{font-weight:800;font-size:18px;width:58px;height:58px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:3px solid #111827;box-shadow:0 2px 5px rgba(0,0,0,.18);background:white;color:var(--blue);line-height:1}
+.court-number{font-size:17px;font-weight:900;line-height:1}
+.court-role{font-size:10px;font-weight:900;line-height:1;color:#374151;letter-spacing:.03em;text-transform:uppercase;margin-top:2px}
 .court-half.home .player-num{border-color:#111827;color:var(--blue)}
 .court-half.away .player-num{border-color:#111827;color:var(--orange)}
+.court-half.away .court-role{color:#374151}
 
 .code-area{background:white;border:1px solid var(--gray-border);border-radius:8px;padding:12px 16px;margin-bottom:12px}
 .code-hint{font-size:12px;color:var(--gray);margin-bottom:8px;text-align:center}
@@ -279,6 +282,230 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
   .sidebar-left,.sidebar-right{display:none}
   .stats-grid{grid-template-columns:repeat(2,1fr)}
 }
+
+
+/* ═══════════════════════════════════════
+   MOBILE RESPONSIVE FIX
+   Keeps the volleyball court visible on phones
+   ═══════════════════════════════════════ */
+@media (max-width: 700px){
+  html, body{
+    width:100%;
+    overflow-x:hidden;
+  }
+
+  .header{
+    padding:10px 12px;
+  }
+
+  .logo-box{
+    width:38px;
+    height:38px;
+    font-size:13px;
+  }
+
+  .logo-text{
+    font-size:20px;
+  }
+
+  .scorebar{
+    padding:10px 8px;
+    gap:6px;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    justify-content:flex-start;
+  }
+
+  .team-side{
+    gap:6px;
+    flex:0 0 auto;
+  }
+
+  .team-name{
+    font-size:16px;
+    white-space:nowrap;
+  }
+
+  .serving-badge{
+    padding:3px 7px;
+    font-size:10px;
+    white-space:nowrap;
+  }
+
+  .set-score{
+    min-width:auto;
+    padding:5px 8px;
+    font-size:11px;
+    white-space:nowrap;
+  }
+
+  .score-main{
+    gap:8px;
+    flex:0 0 auto;
+  }
+
+  .score-num{
+    font-size:40px;
+  }
+
+  .score-dash{
+    font-size:28px;
+  }
+
+  .main-grid{
+    display:block;
+    height:auto;
+    min-height:0;
+  }
+
+  .sidebar-left,
+  .sidebar-right{
+    display:none;
+  }
+
+  .center-panel{
+    padding:10px;
+    overflow-x:hidden;
+  }
+
+  .court{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    min-height:250px;
+    padding:18px 8px;
+    margin:0 auto 12px;
+  }
+
+  .court::before{
+    top:18px;
+    bottom:18px;
+    width:4px;
+  }
+
+  .court::after{
+    top:24px;
+    width:14px;
+    height:14px;
+    box-shadow:0 210px 0 #2f3742;
+  }
+
+  .court-half{
+    padding:10px 6px;
+    min-height:220px;
+    gap:8px;
+    border-width:4px;
+  }
+
+  .court-half.home{
+    border-right-width:2px;
+  }
+
+  .court-half.away{
+    border-left-width:2px;
+  }
+
+  .player-spot{
+    gap:2px;
+  }
+
+  .player-pos{
+    font-size:9px;
+    padding:1px 6px;
+  }
+
+  .player-num{
+    width:44px;
+    height:44px;
+    font-size:15px;
+    border-width:3px;
+  }
+
+  .court-number{
+    font-size:15px;
+  }
+
+  .court-role{
+    font-size:8px;
+    margin-top:1px;
+  }
+
+  .code-area,
+  .voice-area{
+    padding:10px;
+  }
+
+  .code-hint{
+    font-size:11px;
+    line-height:1.4;
+  }
+
+  .input-row{
+    max-width:100%;
+    gap:6px;
+  }
+
+  .code-field{
+    min-width:0;
+    font-size:13px;
+    padding:10px;
+  }
+
+  .icon-btn{
+    width:40px;
+    height:40px;
+    flex:0 0 40px;
+  }
+
+  .confirm-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .analytics-view,
+  .setup-view{
+    padding:12px;
+  }
+
+  .analytics-header,
+  .setup-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+    padding:16px;
+  }
+
+  .analytics-title,
+  .setup-title{
+    font-size:22px;
+  }
+
+  .analytics-actions,
+  .setup-actions{
+    width:100%;
+    flex-wrap:wrap;
+  }
+
+  .setup-btn,
+  .btn-back,
+  .btn-export{
+    flex:1 1 auto;
+    justify-content:center;
+  }
+
+  .setup-court{
+    grid-template-columns:1fr;
+  }
+
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
+
+  .player-stats-section{
+    overflow-x:auto;
+    padding:14px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -508,7 +735,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
         </div>
 
         <div class="code-area">
-          <div class="code-hint">Type: <strong>H-A12+</strong> = Home Attack Point · Reception: <strong>R#</strong> Perfect, <strong>R+</strong> Positive, <strong>R-</strong> Negative, <strong>R!</strong> Error · Press <strong>Enter</strong></div>
+          <div class="code-hint">Type: <strong>H-A12+</strong> · Voice: <strong>A 9 attack kill</strong> / <strong>B 12 reception perfect</strong> · Press <strong>Enter</strong></div>
           <div class="input-row">
             <input class="code-field" id="codeField" placeholder="H-A9+ / A-R12# / TA R9+ / TB R12!" />
             <button class="icon-btn mic-btn" id="micIconBtn" onclick="toggleVoice()">🎙</button>
@@ -523,7 +750,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
           </div>
           <div class="detected-bar" id="detectedBar" style="display:none" onclick="scrollConfirm()"><span>✅</span><span id="detectedText">1 action detected — review and confirm</span></div>
           <div class="confirm-box" id="confirmBox" style="display:none"></div>
-          <div class="transcript empty" id="transcript">Tap mic or type to start…</div>
+          <div class="transcript empty" id="transcript">Tap mic and say: A 9 attack kill / B 12 reception perfect</div>
         </div>
       </div>
 
@@ -550,7 +777,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
         <div class="sb-section" style="border:none">
           <div class="sb-title">Voice Control</div>
           <button class="action-btn mic-side" id="voiceSideBtn" onclick="toggleVoice()">🎙 Start Voice</button>
-          <div class="voice-hint">Say: <em>"Eagles player 1 serve ace"</em> or <em>"point home"</em></div>
+          <div class="voice-hint">Say: <em>"A 9 attack kill"</em> or <em>"B 12 reception perfect"</em></div>
         </div>
       </div>
     </div>
@@ -638,6 +865,51 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 // STATE
 // ══════════════════════════════════════════
 const S={setupDone:false,matchInfo:{competition:'',date:'',venue:'',setsToPlay:5,pointsPerSet:25,tieBreakPoints:15,firstServe:'home',voiceMode:'advanced',autoRotation:'off'},teams:{home:{name:'Eagles FC',short:'EAG',coach:'',system:'5-1',liberos:'',players:[]},away:{name:'Hawks VC',short:'HWK',coach:'',system:'5-1',liberos:'',players:[]}},homeScore:0,awayScore:0,homeSetWins:0,awaySetWins:0,currentSet:1,serving:'home',actions:[],homeRot:[1,4,7,9,11,14],awayRot:[2,5,8,10,12,15],homeRotation:1,awayRotation:1};
+
+// Full-state undo history. Every scoring/rotation/set action saves a snapshot before changing the match.
+const HISTORY=[];
+function cloneMatchState(){
+  return JSON.parse(JSON.stringify({
+    matchInfo:S.matchInfo,
+    teams:S.teams,
+    homeScore:S.homeScore,awayScore:S.awayScore,
+    homeSetWins:S.homeSetWins,awaySetWins:S.awaySetWins,
+    currentSet:S.currentSet,serving:S.serving,
+    actions:S.actions,homeRot:S.homeRot,awayRot:S.awayRot,
+    homeRotation:S.homeRotation,awayRotation:S.awayRotation
+  }));
+}
+function saveUndoState(){
+  HISTORY.push(cloneMatchState());
+  if(HISTORY.length>250)HISTORY.shift();
+}
+function restoreMatchState(state){
+  if(!state)return;
+  S.matchInfo=state.matchInfo;
+  S.teams=state.teams;
+  S.homeScore=state.homeScore;S.awayScore=state.awayScore;
+  S.homeSetWins=state.homeSetWins;S.awaySetWins=state.awaySetWins;
+  S.currentSet=state.currentSet;S.serving=state.serving;
+  S.actions=state.actions;S.homeRot=state.homeRot;S.awayRot=state.awayRot;
+  S.homeRotation=state.homeRotation;S.awayRotation=state.awayRotation;
+  refreshMatchUI();
+}
+function refreshMatchUI(){
+  document.getElementById('homeName').textContent=S.teams.home.name;
+  document.getElementById('awayName').textContent=S.teams.away.name;
+  document.getElementById('homeScore').textContent=S.homeScore;
+  document.getElementById('awayScore').textContent=S.awayScore;
+  document.getElementById('setLabel').textContent='SET '+S.currentSet;
+  const sub=document.getElementById('analyticsSubtitle');
+  if(sub)sub.textContent=`${S.teams.home.name} vs ${S.teams.away.name}`;
+  const fTeam=document.getElementById('filterTeam');
+  if(fTeam){fTeam.options[1].textContent=S.teams.home.name;fTeam.options[2].textContent=S.teams.away.name}
+  renderCourt();
+  updateServing();
+  renderRotationStatus();
+  renderPBP();
+  if(document.getElementById('analyticsPage')?.classList.contains('active'))renderAnalytics();
+}
 
 
 // ══════════════════════════════════════════
@@ -789,7 +1061,7 @@ function applySetupToUI(){
   const fTeam=document.getElementById('filterTeam');
   if(fTeam){fTeam.options[1].textContent=S.teams.home.name;fTeam.options[2].textContent=S.teams.away.name}
   S.homeRotation=1;S.awayRotation=1;
-  S.homeScore=0;S.awayScore=0;S.homeSetWins=0;S.awaySetWins=0;S.currentSet=1;S.actions=[];
+  S.homeScore=0;S.awayScore=0;S.homeSetWins=0;S.awaySetWins=0;S.currentSet=1;S.actions=[];HISTORY.length=0;
   document.getElementById('homeScore').textContent='0';
   document.getElementById('awayScore').textContent='0';
   document.getElementById('homeSetScore').textContent='P0';
@@ -884,13 +1156,14 @@ function startVoice(){
     if(final)liveText+=final;
 
     const display=(liveText+interim).trim();
-    setTranscript(display||'🎙 Listening…',false);
+    const cleanDisplay=toCleanTranscript(display);
+    setTranscript(cleanDisplay||'🎙 Listening…',false);
 
     if(final){
-      parseMultiAction(liveText.trim());
+      parseMultiAction(normalizeSpeech(liveText.trim()));
       updateRecordingCounter();
 
-      if(hasRallyEnd(final)){
+      if(hasRallyEnd(normalizeSpeech(final))){
         stopVoice(true);
       }
     }
@@ -940,12 +1213,131 @@ function updateRecordingCounter(){
   }
 }
 function hasRallyEnd(text){
-  const l=text.toLowerCase();
-  return /\b(point|rally over|end rally|kill|ace|perfect|error|mistake|failed|miss|out|fault)\b/.test(l)
+  const l=normalizeSpeech(text).toLowerCase();
+
+  // Always stop on explicit rally-ending words.
+  if(/\b(point|rally over|end rally|kill|ace|error|mistake|failed|miss|out|fault)\b/.test(l))return true;
+
+  // IMPORTANT: Perfect should NOT stop the rally for quality skills.
+  // Reception perfect / Set perfect / Dig perfect = keep listening.
+  // Attack perfect / Serve perfect / Block perfect = terminal, stop and preview.
+  if(/\bperfect\b/.test(l)){
+    const terminalPerfect=/\b(attack|spike|hit|serve|block)\b[\s\S]{0,50}\bperfect\b|\bperfect\b[\s\S]{0,50}\b(attack|spike|hit|serve|block)\b/.test(l);
+    const nonTerminalPerfect=/\b(reception|receive|pass|set|dig)\b[\s\S]{0,50}\bperfect\b|\bperfect\b[\s\S]{0,50}\b(reception|receive|pass|set|dig)\b/.test(l);
+    if(terminalPerfect && !nonTerminalPerfect)return true;
+  }
+
+  return false;
 }
 function teamInfo(side){
   const name=side==='away'?document.getElementById('awayName').textContent:document.getElementById('homeName').textContent;
   return {side,name,label:side==='away'?'A':'H'}
+}
+
+
+// ══════════════════════════════════════════
+// VOICE NORMALIZATION / CORRECTION LAYER
+// Makes speech input more reliable: "GMB" → "team b", "bee" → "team b", "A 9 attack kill" → "team a player 9 attack kill".
+// Recommended short format: A 9 attack kill / B 12 reception perfect.
+function normalizeSpeech(text){
+  let t=String(text||'').toLowerCase();
+
+  // Normalize punctuation/symbols to spaces.
+  t=t.replace(/[.,;:|/\()[\]{}]/g,' ');
+  t=t.replace(/#/g,' # ');
+  t=t.replace(/\s+/g,' ').trim();
+  if(!t)return '';
+
+  // ✅ FIX: support compact team + jersey formats from speech recognition:
+  // "B9 attack kill" → "team b player 9 attack kill"
+  // "A12 reception perfect" → "team a player 12 reception perfect"
+  // "TB9 serve ace" → "team b player 9 serve ace"
+  // "TA12 dig perfect" → "team a player 12 dig perfect"
+  t=t.replace(/(^|\s)(tb|team\s*b|bee|be|b)\s*#?\s*(\d{1,2})(?=\s|$)/g,' team b player $3');
+  t=t.replace(/(^|\s)(ta|team\s*a|aye|eh|hey|a)\s*#?\s*(\d{1,2})(?=\s|$)/g,' team a player $3');
+
+  // Fix common team-recognition mistakes.
+  const replacements=[
+    [/\bg\s*m\s*b\b/g,'team b'],[/\bgmb\b/g,'team b'],[/\bdmb\b/g,'team b'],[/\bbmb\b/g,'team b'],[/\bgb\b/g,'team b'],
+    [/\bt\s*b\b/g,'team b'],[/\btb\b/g,'team b'],[/\bteam\s+bee\b/g,'team b'],[/\bteam\s+be\b/g,'team b'],[/\bteam\s+bi\b/g,'team b'],[/\bteam\s+me\b/g,'team b'],[/\bteam\s+p\b/g,'team b'],
+    [/\bt\s*a\b/g,'team a'],[/\bta\b/g,'team a'],[/\bteam\s+eh\b/g,'team a'],[/\bteam\s+ei\b/g,'team a'],[/\bteam\s+hey\b/g,'team a'],[/\bteam\s+aa\b/g,'team a'],
+    [/\bhome\b/g,'team a'],[/\baway\b/g,'team b']
+  ];
+  replacements.forEach(([rg,val])=>{t=t.replace(rg,val)});
+
+  // Support short commands with a space:
+  // "B 9 attack kill" / "bee 9 attack kill" / "A player 7 serve ace".
+  t=t.replace(/(^|\s)(bee|be|b)\s+(?=(?:player\s+|number\s+|num\s+|#\s*)?(?:\d+|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\b)/g,' team b ');
+  t=t.replace(/(^|\s)(aye|eh|hey|a)\s+(?=(?:player\s+|number\s+|num\s+|#\s*)?(?:\d+|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\b)/g,' team a ');
+
+  // Add the word "player" after team if the user says "team b 9 attack kill".
+  t=t.replace(/\bteam\s+([ab])\s+(?=(\d+|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\b)/g,'team $1 player ');
+
+  // Common volleyball word corrections.
+  t=t.replace(/\btech\b/g,'attack');
+  t=t.replace(/\batack\b/g,'attack');
+  t=t.replace(/\bspike\b/g,'attack');
+  t=t.replace(/\breceive\b/g,'reception');
+  t=t.replace(/\bpass\b/g,'reception');
+  t=t.replace(/\bservice\b/g,'serve');
+  t=t.replace(/\bserving\b/g,'serve');
+  t=t.replace(/\bexcellent\b/g,'perfect');
+  t=t.replace(/\bgrade\b/g,'great');
+  t=t.replace(/\bfault\b/g,'error');
+  t=t.replace(/\bmistake\b/g,'error');
+  t=t.replace(/\bfailed\b/g,'error');
+  t=t.replace(/\bmissed\b/g,'miss');
+
+  // Remove double spaces again.
+  t=t.replace(/\s+/g,' ').trim();
+  return t;
+}
+
+
+
+// Show a clean scout-friendly command in LIVE TRANSCRIPT instead of browser mistakes.
+// Internal parser still uses normalizeSpeech(), but the user sees: "B 9 attack kill".
+function toCleanTranscript(text){
+  const normalized=normalizeSpeech(text);
+  if(!normalized)return '';
+
+  let t=normalized;
+
+  // Convert internal phrases to short readable commands.
+  t=t.replace(/\bteam\s+a\s+player\s+(\d+)\b/g,'A $1');
+  t=t.replace(/\bteam\s+b\s+player\s+(\d+)\b/g,'B $1');
+  t=t.replace(/\bteam\s+a\b/g,'A');
+  t=t.replace(/\bteam\s+b\b/g,'B');
+
+  // Convert remaining spoken number words for display.
+  t=t.split(/\s+/).map(tok=>normalizeNumberWord(tok)||tok).join(' ');
+
+  // Remove helper words that should not be shown in the live command.
+  t=t.replace(/\b(player|number|num)\b/g,' ');
+
+  // Make known volleyball words clean.
+  const cleanWords={
+    attack:'attack',serve:'serve',reception:'reception',block:'block',dig:'dig',set:'set',
+    perfect:'perfect',positive:'positive',negative:'negative',neutral:'neutral',continue:'continue',
+    kill:'kill',ace:'ace',error:'error',miss:'miss',out:'out',fault:'error',mistake:'error'
+  };
+  t=t.split(/\s+/).map(tok=>cleanWords[tok]||tok).join(' ');
+
+  // Fix compact display if any remains.
+  t=t.replace(/\b([AB])\s*(\d{1,2})\b/g,'$1 $2');
+  t=t.replace(/\s+/g,' ').trim();
+
+  // Uppercase only team letters at beginning/after separators.
+  t=t.replace(/\b(a|b)\b/g,m=>m.toUpperCase());
+  return t;
+}
+
+function displayVoiceDebug(raw,clean){
+  if(!raw)return;
+  if(raw.trim().toLowerCase()!==clean.trim().toLowerCase()){
+    console.log('VOICE RAW:',raw);
+    console.log('VOICE CLEAN:',clean);
+  }
 }
 
 // ══════════════════════════════════════════
@@ -957,31 +1349,42 @@ const OPENAI_API_KEY='YOUR_API_KEY_HERE';
 const USE_AI_VOICE=true;
 
 async function processVoiceInput(text){
+  // Clean speech BEFORE AI and fallback parser.
+  // This fixes errors like "GMB" becoming Team B and supports short commands: A 9 attack kill / B 12 reception perfect.
+  const rawText=String(text||'').trim();
+  const cleanText=normalizeSpeech(rawText);
+  displayVoiceDebug(rawText,cleanText);
+
+  if(!cleanText){
+    pendingActions=[];
+    return;
+  }
+
   // Hybrid mode: AI first, old parser as fallback.
   if(USE_AI_VOICE && OPENAI_API_KEY && OPENAI_API_KEY!=='YOUR_API_KEY_HERE'){
     try{
-      await processVoiceWithAI(text);
+      await processVoiceWithAI(cleanText,rawText);
 
       // If AI returns nothing, use the old parser automatically.
       if(pendingActions.length===0){
         console.log('AI returned no actions, using fallback parser');
-        parseMultiAction(text);
+        parseMultiAction(cleanText);
       }
       return;
     }catch(err){
       console.error('AI voice parser failed, using fallback parser:',err);
       showToast('⚠️ AI failed — fallback parser used');
-      parseMultiAction(text);
+      parseMultiAction(cleanText);
       return;
     }
   }
 
   // Fallback parser keeps the app working without an API key.
-  parseMultiAction(text);
+  parseMultiAction(cleanText);
 }
 
 
-async function processVoiceWithAI(text){
+async function processVoiceWithAI(text,rawText=''){
   console.log('Sending to AI:', text);
   setTranscript('🧠 AI is checking the rally…',false);
 
@@ -1007,6 +1410,10 @@ Teams:
 - Team A = home = ${homeName}
 - Team B = away = ${awayName}
 
+Accepted team phrases:
+- A, A9, TA9, team A, home = Team A
+- B, B9, TB9, bee, team B, GMB, away = Team B
+
 Rules:
 - Preserve action order exactly.
 - Team is sticky: if the speaker says Team B once, following player-only actions stay Team B until Team A is said.
@@ -1014,7 +1421,7 @@ Rules:
 - Skills allowed: Serve, Reception, Set, Attack, Block, Dig, Freeball, Pipe, Point.
 - Evaluations allowed: Perfect, Positive, Continue, Neutral, Negative, Error, Kill, Ace, Block Point, Point.
 - "serve continue" = Serve + Continue, not a point.
-- "perfect" = Perfect and becomes a point for that team.
+- "perfect" = Perfect. It is a point ONLY when skill is Attack, Serve, or Block. Reception/Dig/Set perfect is only a quality action, not a point.
 - "attack kill" = Attack + Kill.
 - "attack perfect kill" = Attack + Kill.
 - "serve ace" = Serve + Ace.
@@ -1052,10 +1459,10 @@ Schema:
     }
   }
 
-  applyActionsFromAI(output);
+  applyActionsFromAI(output, rawText || text);
 }
 
-function applyActionsFromAI(actions){
+function applyActionsFromAI(actions,originalTranscript=''){
   pendingActions=[];
   if(!Array.isArray(actions))return;
 
@@ -1084,7 +1491,7 @@ function applyActionsFromAI(actions){
       evaluation,
       evalSym,
       code,
-      transcript:liveText,
+      transcript:originalTranscript || liveText,
       text: skill==='Point' ? `${teamName} point` : `${teamName}: #${player} ${skill} → ${evaluation}`
     });
   });
@@ -1299,7 +1706,7 @@ function showConfirm(actions){
 
   el.innerHTML=`
     ${rows}
-    <div style="font-size:11px;color:var(--gray);font-style:italic;margin-bottom:8px">"${liveText.trim()}"</div>
+    <div style="font-size:11px;color:var(--gray);font-style:italic;margin-bottom:8px">Heard: "${liveText.trim()}"<br>Clean: "${toCleanTranscript(liveText).trim()}"</div>
     <div class="confirm-btns">
       <button class="btn-save" onclick="confirmActions()">✓ Confirm All (${actions.length})</button>
       <button class="btn-discard" onclick="discardActions()">Discard</button>
@@ -1323,8 +1730,9 @@ function getPointWinnerSide(action){
   // ✅ Quick/explicit point command
   if(skill==='point')return actionTeam;
 
-  // ✅ Perfect (#) gives point to the same team
-  if(sym==='#' || evaluation==='perfect')return actionTeam;
+  // ✅ Perfect (#) gives point ONLY for terminal skills: Attack, Serve, Block
+  // Reception # / Dig # / Set # stay as quality actions and do NOT add score.
+  if((sym==='#' || evaluation==='perfect') && (skill==='attack' || skill==='serve' || skill==='block'))return actionTeam;
 
   // ✅ Kill / ace / block point gives point to the same team
   if(sym==='+' && (skill==='attack' || skill==='block'))return actionTeam;
@@ -1416,6 +1824,7 @@ function confirmActions(){
   if(!pendingActions.length)return;
   const count=pendingActions.length;
   pendingActions.forEach(a=>{
+    saveUndoState();
     const pointWinner=getPointWinnerSide(a);
     const pointAction=!!pointWinner;
     const phaseMeta=pointAction?buildPointPhaseMeta(pointWinner):null;
@@ -1445,6 +1854,7 @@ function submitCode(){
   if(!raw)return;
   const p=parseCode(raw);
   if(p){
+    saveUndoState();
     const pointWinner=getPointWinnerSide(p);
     const pointAction=!!pointWinner;
     const phaseMeta=pointAction?buildPointPhaseMeta(pointWinner):null;
@@ -1653,6 +2063,7 @@ function getScore(){return S.homeScore+'-'+S.awayScore}
 
 // QUICK ACTIONS
 function addPoint(side){
+  saveUndoState();
   const phaseMeta=buildPointPhaseMeta(side);
   const autoRotation=bumpScore(side);
   const teamName=side==='home'?document.getElementById('homeName').textContent:document.getElementById('awayName').textContent;
@@ -1675,19 +2086,13 @@ function restoreAutoRotation(meta){
 }
 
 function undoLast(){
-  if(!S.actions.length)return;
-  const last=S.actions.shift();
-  if(last.pointAction){
-    if(last.teamSide==='home'&&S.homeScore>0){S.homeScore--;document.getElementById('homeScore').textContent=S.homeScore}
-    else if(last.teamSide==='away'&&S.awayScore>0){S.awayScore--;document.getElementById('awayScore').textContent=S.awayScore}
-    restoreAutoRotation(last.autoRotation);
-  }else if(last.manualRotation){
-    // Manual rotation undo is not automatic yet; use opposite manual rotation if needed.
+  if(!HISTORY.length){
+    showToast('Nothing to undo');
+    return;
   }
-  renderCourt();
-  renderRotationStatus();
-  renderPBP();
-  showToast('↩ Undone: '+last.code)
+  const prev=HISTORY.pop();
+  restoreMatchState(prev);
+  showToast('↩ Undo restored previous match state');
 }
 function clickPlayer(side,num){
   const prefix=side==='home'?'H-':'A-';
@@ -1705,11 +2110,17 @@ const POS_IDS=['p1','p2','p3','p4','p5','p6'];
 function renderCourtSide(side){
   const rot=side==='home'?S.homeRot:S.awayRot;
   const prefix=side==='home'?'h':'a';
+
   POS_IDS.forEach((pos,i)=>{
     const num=rot[i];
     const numEl=document.getElementById(prefix+'-'+pos);
     if(!numEl)return;
-    numEl.textContent='#'+num;
+
+    const player=getPlayerByNumber(side,num);
+    const role=String(player.position||'').trim().toUpperCase();
+
+    numEl.innerHTML=`<span class="court-number">#${num}</span>${role?`<span class="court-role">${role}</span>`:''}`;
+
     const spot=numEl.closest('.player-spot');
     if(spot)spot.onclick=()=>clickPlayer(side,num);
   });
@@ -1721,6 +2132,7 @@ function renderCourt(){
 }
 
 function rotate(side,opts={}){
+  if(!opts.silent)saveUndoState();
   const rot=side==='home'?S.homeRot:S.awayRot;
   const beforeRot=[...rot];
   const beforeRotationNumber=side==='home'?S.homeRotation:S.awayRotation;
@@ -1761,6 +2173,7 @@ function rotate(side,opts={}){
 
 // SET
 function endSet(){
+  saveUndoState();
   if(S.homeScore>S.awayScore)S.homeSetWins++;
   else if(S.awayScore>S.homeScore)S.awaySetWins++;
   S.currentSet++;S.homeScore=0;S.awayScore=0;
